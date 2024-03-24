@@ -1,0 +1,385 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=altadefinizione.tienda&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 15243,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Antony"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 8,
+        "internalName": "AltadefinizioneProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AltadefinizioneProvider.cs3",
+        "name": "AltadefinizioneProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.animesaturn.cc&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 20038,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie"
+        ],
+        "version": 8,
+        "internalName": "AnimeSaturnProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AnimeSaturnProvider.cs3",
+        "name": "AnimeSaturnProvider"
+    },
+    {
+        "iconUrl": "https://www.animeunity.to/apple-touch-icon.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 39113,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 13,
+        "internalName": "AnimeUnity",
+        "description": "Anime from AnimeUnity",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AnimeUnity.cs3",
+        "name": "AnimeUnity"
+    },
+    {
+        "iconUrl": "https://static.animeworld.so/assets/images/favicon/android-icon-192x192.png?s",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 37135,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 15,
+        "internalName": "AnimeWorldProvider",
+        "description": "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AnimeWorldProvider.cs3",
+        "name": "AnimeWorldProvider"
+    },
+    {
+        "iconUrl": "https://www.calciostreaming.cool/templates/calciostreaming1/images/icons/apple-touch-icon.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 10606,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "Adippe",
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 18,
+        "internalName": "CalcioStreaming",
+        "description": "Live streams from the CalcioStreaming. Forked from the CalcioStreaming plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CalcioStreaming.cs3",
+        "name": "CalcioStreaming"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=calciostreaming.live&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 11512,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "ZCBan",
+            "Antony"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 7,
+        "internalName": "CalcioStreamingLat",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CalcioStreamingLat.cs3",
+        "name": "CalcioStreamingLat"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=casacinema.lol&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 14561,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 7,
+        "internalName": "CasaCinemaProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CasaCinemaProvider.cs3",
+        "name": "CasaCinemaProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=cineblog01.legal&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 10136,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "CineBlog01Provider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CineBlog01Provider.cs3",
+        "name": "CineBlog01Provider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=eurostreaming.social&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 11712,
+        "status": 0,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "version": 4,
+        "internalName": "EurostreamingProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/EurostreamingProvider.cs3",
+        "name": "EurostreamingProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=filmpertutti.photo&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 11976,
+        "status": 0,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 9,
+        "internalName": "FilmpertuttiProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/FilmpertuttiProvider.cs3",
+        "name": "FilmpertuttiProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=guardaserie.golf&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 11770,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 9,
+        "internalName": "GuardaSerieProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/GuardaSerieProvider.cs3",
+        "name": "GuardaSerieProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=ilgeniodellostreaming.hair&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 15247,
+        "status": 0,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 10,
+        "internalName": "IlGenioDelloStreamingProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/IlGenioDelloStreamingProvider.cs3",
+        "name": "IlGenioDelloStreamingProvider"
+    },
+    {
+        "iconUrl": "https://onlineserietv.com/wp-content/uploads/2023/01/cropped-tv-1.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 19432,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior",
+            "Antony"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Cartoon",
+            "Anime",
+            "Documentary"
+        ],
+        "version": 4,
+        "internalName": "OnlineSerieTV",
+        "description": "Movies and Shows from OnlineSerieTV",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/OnlineSerieTV.cs3",
+        "name": "OnlineSerieTV"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=seriesflix.video&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 64867,
+        "status": 0,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 7,
+        "internalName": "SoraItalianStream",
+        "description": "Provider che utilizza tmdb. Non tutti i links sono funzionanti",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/SoraItalianStream.cs3",
+        "name": "SoraItalianStream"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=streamingcommunity.online&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 39008,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 57,
+        "internalName": "StreamingcommunityProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/StreamingcommunityProvider.cs3",
+        "name": "StreamingcommunityProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=tantifilm.mobi&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 15563,
+        "status": 0,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 8,
+        "internalName": "TantiFilmProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/TantiFilmProvider.cs3",
+        "name": "TantiFilmProvider"
+    },
+    {
+        "iconUrl": "https://toonitalia.green/wp-content/uploads/2023/08/favicon.ico",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 17390,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Cartoon",
+            "TvSeries",
+            "Movie",
+            "Anime"
+        ],
+        "version": 6,
+        "internalName": "ToonItalia",
+        "description": "Movies, TV Shows and Anime from ToonItalia.green",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/ToonItalia.cs3",
+        "name": "ToonItalia"
+    },
+    {
+        "iconUrl": "https://toonitalia.xyz/wp-content/uploads/2023/08/cropped-Majintoon-32x32.jpg",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 19089,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Antony"
+        ],
+        "tvTypes": [
+            "Cartoon",
+            "TvSeries",
+            "Movie",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "ToonItaliaXYZ",
+        "description": "Movies, TV Shows and Anime from ToonItalia.xyz",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/ToonItaliaXYZ.cs3",
+        "name": "ToonItaliaXYZ"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 25769,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 5,
+        "internalName": "TvItalianaProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/TvItalianaProvider.cs3",
+        "name": "TvItalianaProvider"
+    }
+]
