@@ -1,0 +1,312 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=altadefinizione.tienda&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 12193,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "AltadefinizioneProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AltadefinizioneProvider.cs3",
+        "name": "AltadefinizioneProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.animesaturn.cc&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 17143,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie"
+        ],
+        "version": 4,
+        "internalName": "AnimeSaturnProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AnimeSaturnProvider.cs3",
+        "name": "AnimeSaturnProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.animeworld.tv&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 21043,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 4,
+        "internalName": "AnimeWorldProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AnimeWorldProvider.cs3",
+        "name": "AnimeWorldProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=aniplay.it&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 21540,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 6,
+        "internalName": "AniPlayProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/AniPlayProvider.cs3",
+        "name": "AniPlayProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=calciostreaming.live&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 8784,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 3,
+        "internalName": "CalcioStreamingProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CalcioStreamingProvider.cs3",
+        "name": "CalcioStreamingProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=casacinema.lol&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 14719,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "CasaCinemaProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CasaCinemaProvider.cs3",
+        "name": "CasaCinemaProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=cineblog01.legal&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 10100,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "CineBlog01Provider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CineBlog01Provider.cs3",
+        "name": "CineBlog01Provider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=cb01.rip&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 14396,
+        "status": 2,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "CineBlogProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/CineBlogProvider.cs3",
+        "name": "CineBlogProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=eurostreaming.social&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 11786,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "version": 4,
+        "internalName": "EurostreamingProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/EurostreamingProvider.cs3",
+        "name": "EurostreamingProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=filmpertutti.photo&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 14833,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 6,
+        "internalName": "FilmpertuttiProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/FilmpertuttiProvider.cs3",
+        "name": "FilmpertuttiProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=guardaserie.golf&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 12004,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "GuardaSerieProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/GuardaSerieProvider.cs3",
+        "name": "GuardaSerieProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=ilgeniodellostreaming.hair&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 15364,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 6,
+        "internalName": "IlGenioDelloStreamingProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/IlGenioDelloStreamingProvider.cs3",
+        "name": "IlGenioDelloStreamingProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=seriesflix.video&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 64540,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 4,
+        "internalName": "SoraItalianStream",
+        "description": "Provider che utilizza tmdb. Non tutti i links sono funzionanti",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/SoraItalianStream.cs3",
+        "name": "SoraItalianStream"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=streamingcommunity.online&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 35729,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe",
+            "Forthe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 20,
+        "internalName": "StreamingcommunityProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/StreamingcommunityProvider.cs3",
+        "name": "StreamingcommunityProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=tantifilm.mobi&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 16639,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 6,
+        "internalName": "TantiFilmProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/TantiFilmProvider.cs3",
+        "name": "TantiFilmProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/antonycaporossi/testing-private",
+        "fileSize": 24648,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Adippe"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 3,
+        "internalName": "TvItalianaProvider",
+        "url": "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/TvItalianaProvider.cs3",
+        "name": "TvItalianaProvider"
+    }
+]
