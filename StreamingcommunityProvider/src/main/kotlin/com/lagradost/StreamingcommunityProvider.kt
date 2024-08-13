@@ -23,18 +23,32 @@ class StreamingcommunityProvider : MainAPI() {
         "{\"name\":\"trending\",\"genre\":null}" to "I titoli del momento",
         "{\"name\":\"latest\",\"genre\":null}" to "Aggiunti di recente",
         "{\"name\":\"top10\",\"genre\":null}" to "Top 10 titoli di oggi",
+        "{\"name\":\"genre\",\"genre\":\"Famiglia\"}" to "Famiglia",
+        "{\"name\":\"genre\",\"genre\":\"Kids\"}" to "Kids",
+        "{\"name\":\"genre\",\"genre\":\"Crime\"}" to "Crime",
+        "{\"name\":\"genre\",\"genre\":\"Musica\"}" to "Musica",
+        "{\"name\":\"genre\",\"genre\":\"Thriller\"}" to "Thriller",
+        "{\"name\":\"genre\",\"genre\":\"Korean Drama\"}" to "Korean Drama",
+        "{\"name\":\"genre\",\"genre\":\"Soap\"}" to "Soap"
+        "{\"name\":\"genre\",\"genre\":\"Guerra\"}" to "Guerra"
+        "{\"name\":\"genre\",\"genre\":\"Commedia\"}" to "Commedia"
+        "{\"name\":\"genre\",\"genre\":\"Action & Adventure\"}" to "Action & Adventure",
         "{\"name\":\"genre\",\"genre\":\"Avventura\"}" to "Avventura",
         "{\"name\":\"genre\",\"genre\":\"Animazione\"}" to "Animazione",
+        "{\"name\":\"genre\",\"genre\":\"Mistero\"}" to "Mistero",
+        "{\"name\":\"genre\",\"genre\":\"Storia\"}" to "Storia",
+        "{\"name\":\"genre\",\"genre\":\"Televisione Film\"}" to "Televisione Film",
         "{\"name\":\"genre\",\"genre\":\"Azione\"}" to "Azione",
-        "{\"name\":\"genre\",\"genre\":\"Action & Adventure\"}" to "Action & Adventure",
-        "{\"name\":\"genre\",\"genre\":\"Famiglia\"}" to "Famiglia",
+        "{\"name\":\"genre\",\"genre\":\"War & Politics\"}" to "War & Politics",
+        "{\"name\":\"genre\",\"genre\":\"Romance\"}" to "Romance",
+        "{\"name\":\"genre\",\"genre\":\"Sci-Fi & Fantasy\"}" to "Sci-Fi & Fantasy",
+        "{\"name\":\"genre\",\"genre\":\"Reality\"}" to "Reality",
+        "{\"name\":\"genre\",\"genre\":\"Horror\"}" to "Horror",
+        "{\"name\":\"genre\",\"genre\":\"Fantascienza\"}" to "Fantascienza",
+        "{\"name\":\"genre\",\"genre\":\"Western\"}" to "Western",
         "{\"name\":\"genre\",\"genre\":\"Fantasy\"}" to "Fantasy",
         "{\"name\":\"genre\",\"genre\":\"Documentario\"}" to "Documentario",
-        "{\"name\":\"genre\",\"genre\":\"Horror\"}" to "Horror",
-        "{\"name\":\"genre\",\"genre\":\"Mistero\"}" to "Mistero",
-        "{\"name\":\"genre\",\"genre\":\"Crime\"}" to "Crimine",
         "{\"name\":\"genre\",\"genre\":\"Dramma\"}" to "Dramma",
-        "{\"name\":\"genre\",\"genre\":\"Commedia\"}" to "Commedia"
     )
 
     private val userAgent =
@@ -45,9 +59,12 @@ class StreamingcommunityProvider : MainAPI() {
         if (page == 1 && request.data.contains("trending")) {
             val url = "${this.mainUrl}/api/sliders/fetch"
             val postDatas = listOf(
-                "{\"sliders\":[{\"name\":\"trending\",\"genre\":null},{\"name\":\"latest\",\"genre\":null},{\"name\":\"top10\",\"genre\":null}]}",
-                "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Avventura\"},{\"name\":\"genre\",\"genre\":\"Animazione\"},{\"name\":\"genre\",\"genre\":\"Azione\"},{\"name\":\"genre\",\"genre\":\"Action & Adventure\"},{\"name\":\"genre\",\"genre\":\"Famiglia\"},{\"name\":\"genre\",\"genre\":\"Fantasy\"}]}",
-                "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Documentario\"},{\"name\":\"genre\",\"genre\":\"Horror\"},{\"name\":\"genre\",\"genre\":\"Mistero\"},{\"name\":\"genre\",\"genre\":\"Crime\"},{\"name\":\"genre\",\"genre\":\"Dramma\"},{\"name\":\"genre\",\"genre\":\"Commedia\"}]}"
+                
+            "{\"sliders\":[{\"name\":\"upcoming\",\"genre\":null},{\"name\":\"genre\",\"genre\":\"Famiglia\"},{\"name\":\"genre\",\"genre\":\"Kids\"}]}",
+            "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Crime\"},{\"name\":\"genre\",\"genre\":\"Musica\"},{\"name\":\"genre\",\"genre\":\"Thriller\"},{\"name\":\"genre\",\"genre\":\"Korean drama\"},{\"name\":\"genre\",\"genre\":\"Soap\"},{\"name\":\"genre\",\"genre\":\"Guerra\"}]}",
+            "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Commedia\"},{\"name\":\"genre\",\"genre\":\"Action & Adventure\"},{\"name\":\"genre\",\"genre\":\"Avventura\"},{\"name\":\"genre\",\"genre\":\"Animazione\"},{\"name\":\"genre\",\"genre\":\"Mistero\"},{\"name\":\"genre\",\"genre\":\"Storia\"}]}",
+            "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"televisione film\"},{\"name\":\"genre\",\"genre\":\"Azione\"},{\"name\":\"genre\",\"genre\":\"War & Politics\"},{\"name\":\"genre\",\"genre\":\"Romance\"},{\"name\":\"genre\",\"genre\":\"Sci-Fi & Fantasy\"},{\"name\":\"genre\",\"genre\":\"Reality\"}]}",
+            "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Horror\"},{\"name\":\"genre\",\"genre\":\"Fantascienza\"},{\"name\":\"genre\",\"genre\":\"Western\"},{\"name\":\"genre\",\"genre\":\"Fantasy\"},{\"name\":\"genre\",\"genre\":\"Documentario\"},{\"name\":\"genre\",\"genre\":\"Dramma\"}]}"
             )
             val items: List<HomePageList> = postDatas.map { postData ->
                 val soup = app.post(
@@ -221,11 +238,14 @@ class StreamingcommunityProvider : MainAPI() {
         val document = app.get(
             "${this.mainUrl}/iframe/${dataJson.titleId}?episode_id=${dataJson.episodeId}",
             referer = mainUrl,
-            headers = mapOf("User-Agent" to userAgent)
+            headers = mapOf(
+                "User-Agent" to userAgent,
+                "Content-Type" to "application/json"
+            )
         ).document
         val firstStageUrl = document.select("iframe").attr("src")
         val documentVixcloud = app.get(
-            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
+            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent, "Content-Type" to "application/json")
         ).document.toString()
         val test =
             Regex("""window\.masterPlaylistParams = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
