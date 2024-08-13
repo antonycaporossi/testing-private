@@ -10,7 +10,7 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ShortLink
 import com.lagradost.cloudstream3.utils.loadExtractor
 import org.jsoup.nodes.Element
-import com.lagradost.cloudstream3.utils.AppUtils.html
+//import com.lagradost.cloudstream3.utils.AppUtils.html
 import com.lagradost.cloudstream3.network.CloudflareKiller
 
 
