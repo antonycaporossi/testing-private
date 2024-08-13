@@ -37,7 +37,7 @@ subprojects {
     cloudstream {
         // when running through github workflow, GITHUB_REPOSITORY should contain current repository name
         // you can modify it to use other git hosting services, like gitlab
-        setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/CakesTwix/cloudstream-extensions-uk")
+        setRepo(System.getenv("GITHUB_REPOSITORY") ?: "user/repo")
     }
 
     android {
@@ -78,6 +78,14 @@ subprojects {
         implementation(kotlin("stdlib")) // adds standard kotlin features, like listOf, mapOf etc
         implementation("com.github.Blatzar:NiceHttp:0.4.11") // http library
         implementation("org.jsoup:jsoup:1.17.2") // html parser
+        implementation("com.github.Blatzar:NiceHttp:0.3.2") // http library
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4") // html parser
+
+        //run JS
+        implementation("org.mozilla:rhino:1.7.14")
+		    // Library/extensions searching with Levenshtein distance
+        implementation ("me.xdrop:fuzzywuzzy:1.4.0")
     }
 }
 
