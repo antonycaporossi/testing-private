@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.lagradost
 
 import android.util.Log
@@ -17,7 +19,7 @@ import org.jsoup.nodes.Element
 
 class IlGenioDelloStreamingProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://ilgeniodellostreaming.hair"
+    override var mainUrl = "https://ilgeniodellostreaming.my"
     override var name = "IlGenioDelloStreaming"
     override val hasMainPage = true
     override val hasChromecastSupport = true

@@ -1,3 +1,4 @@
+@file:Suppress("NAME_SHADOWING")
 package com.lagradost
 
 import com.lagradost.cloudstream3.*

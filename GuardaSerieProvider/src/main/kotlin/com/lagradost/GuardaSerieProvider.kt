@@ -1,3 +1,4 @@
+@file:Suppress("NAME_SHADOWING")
 package com.lagradost
 
 import com.lagradost.cloudstream3.*
@@ -8,7 +9,7 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 
 class GuardaSerieProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://guardaserie.app"
+    override var mainUrl = "https://guardaserie.my"
     override var name = "GuardaSerie"
     override val hasMainPage = true
     override val hasChromecastSupport = true

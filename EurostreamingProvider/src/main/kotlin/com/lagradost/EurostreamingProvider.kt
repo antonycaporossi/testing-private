@@ -1,3 +1,4 @@
+@file:Suppress("NAME_SHADOWING")
 package com.lagradost
 
 import com.lagradost.cloudstream3.*
@@ -11,7 +12,7 @@ import org.jsoup.nodes.Element
 
 class EurostreamingProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://eurostreaming.expert"
+    override var mainUrl = "https://eurostreaming.agency"
     override var name = "Eurostreaming"
     override val hasMainPage = true
     override val hasChromecastSupport = true
