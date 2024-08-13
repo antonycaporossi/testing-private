@@ -29,9 +29,9 @@ class StreamingcommunityProvider : MainAPI() {
         "{\"name\":\"genre\",\"genre\":\"Musica\"}" to "Musica",
         "{\"name\":\"genre\",\"genre\":\"Thriller\"}" to "Thriller",
         "{\"name\":\"genre\",\"genre\":\"Korean Drama\"}" to "Korean Drama",
-        "{\"name\":\"genre\",\"genre\":\"Soap\"}" to "Soap"
-        "{\"name\":\"genre\",\"genre\":\"Guerra\"}" to "Guerra"
-        "{\"name\":\"genre\",\"genre\":\"Commedia\"}" to "Commedia"
+        "{\"name\":\"genre\",\"genre\":\"Soap\"}" to "Soap",
+        "{\"name\":\"genre\",\"genre\":\"Guerra\"}" to "Guerra",
+        "{\"name\":\"genre\",\"genre\":\"Commedia\"}" to "Commedia",
         "{\"name\":\"genre\",\"genre\":\"Action & Adventure\"}" to "Action & Adventure",
         "{\"name\":\"genre\",\"genre\":\"Avventura\"}" to "Avventura",
         "{\"name\":\"genre\",\"genre\":\"Animazione\"}" to "Animazione",
