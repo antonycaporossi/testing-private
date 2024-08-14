@@ -9,6 +9,7 @@ import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
+import java.net.URLDecoder
 import org.json.JSONObject
 
 class StreamingcommunityProvider : MainAPI() {
@@ -161,7 +162,8 @@ class StreamingcommunityProvider : MainAPI() {
 
         val document = app.get(realUrl, referer = mainUrl).document
         val json = document.select("div#app").attr("data-page")
-        val parsedJson = parseJson<LoadResponseJson>(json)
+        val decodedJson = URLDecoder.decode(encodedJson, "UTF-8")
+        val parsedJson = parseJson<LoadResponseJson>(decodedJson)
 
         val type = if (parsedJson.props.title.type == "tv") TvType.TvSeries else TvType.Movie
 
