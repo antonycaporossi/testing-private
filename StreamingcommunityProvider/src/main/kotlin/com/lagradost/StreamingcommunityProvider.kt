@@ -12,7 +12,7 @@ import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import org.json.JSONObject
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingcommunity.photos/"
+    override var mainUrl = "https://streamingcommunity.photos"
     private var cdnUrl = "https://cdn.streamingcommunity.photos" // Images
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
