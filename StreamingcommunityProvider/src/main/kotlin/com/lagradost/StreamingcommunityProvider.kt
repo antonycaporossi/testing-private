@@ -215,7 +215,7 @@ class StreamingcommunityProvider : MainAPI() {
             val data = LoadLinkData(
                 titleId = titleId,
                 episodeId = titleId,
-                scwsId = parsedJson.props.title.scwsId.toString()
+                scwsId = parsedJson.props.title.scws_id.toString()
             ).toJson()
             return newMovieLoadResponse(title, data, TvType.Movie, data) {
                 this.year = year?.toIntOrNull()
@@ -241,13 +241,12 @@ class StreamingcommunityProvider : MainAPI() {
             "${this.mainUrl}/iframe/${dataJson.titleId}?episode_id=${dataJson.episodeId}",
             referer = mainUrl,
             headers = mapOf(
-                "User-Agent" to userAgent,
-                "Content-Type" to "application/json"
+                "User-Agent" to userAgent
             )
         ).document
         val firstStageUrl = document.select("iframe").attr("src")
         val documentVixcloud = app.get(
-            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent, "Content-Type" to "application/json")
+            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
         ).document.toString()
         val test =
             Regex("""window\.masterPlaylistParams = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
