@@ -161,7 +161,7 @@ class StreamingcommunityProvider : MainAPI() {
         val realUrl = "${this.mainUrl}/titles/${linkData.id}-${linkData.slug}"
 
         val document = app.get(realUrl, referer = mainUrl).document
-        val json = document.select("div#app").attr("data-page")
+        val encodedJson = document.select("div#app").attr("data-page")
         val decodedJson = URLDecoder.decode(encodedJson, "UTF-8")
         val parsedJson = parseJson<LoadResponseJson>(decodedJson)
 
