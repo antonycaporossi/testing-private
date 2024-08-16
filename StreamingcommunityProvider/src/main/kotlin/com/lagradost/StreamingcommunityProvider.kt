@@ -2,6 +2,11 @@
 
 package com.lagradost
 
+//import android.util.Log
+import android.widget.Toast
+//import android.content.Context
+//import android.app.AlertDialog
+//import android.content.DialogInterface
 import com.fasterxml.jackson.annotation.*
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addRating
@@ -9,6 +14,7 @@ import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
+import com.lagradost.cloudstream3.CommonActivity.showToast
 import java.net.URLDecoder
 import org.json.JSONObject
 
@@ -136,11 +142,21 @@ class StreamingcommunityProvider : MainAPI() {
         val url = "$mainUrl/search"
         val soup = app.get(
             url, params = mapOf("q" to query), headers = mapOf(
-                "X-Inertia" to "true", "X-Inertia-Version" to "16d7fef7dd27890ede802c00747e79cb"
+                "X-Inertia" to "true", "X-Inertia-Version" to "db579ba3f2dcdf6a2910492a9a588de1"
             )
         ).text
         val responseJson = parseJson<SearchResponseJson>(soup)
         return responseJson.props.titles.map { it.toSearchResult() }
+    }
+
+    private fun transformUrl(url: String): String? {
+        val regex = """https://vixcloud\.co/embed/(\d+)\?""".toRegex()
+        val matchResult = regex.find(url)
+
+        return matchResult?.let {
+            val videoId = it.groupValues[1]
+            "https://vixcloud.co/playlist/$videoId"
+        }
     }
 
     private fun Episodes.toEpisode(titleId: String, season: Int): Episode {
@@ -194,7 +210,7 @@ class StreamingcommunityProvider : MainAPI() {
                 val documentSeason = app.get(
                     "$realUrl/stagione-$season", referer = mainUrl, headers = mapOf(
                         "X-Inertia" to "true",
-                        "X-Inertia-Version" to "16d7fef7dd27890ede802c00747e79cb"
+                        "X-Inertia-Version" to "db579ba3f2dcdf6a2910492a9a588de1"
                     )
                 ).text
                 val parsedJsonSeason = parseJson<LoadResponseJson>(documentSeason)
@@ -214,12 +230,12 @@ class StreamingcommunityProvider : MainAPI() {
         } else {
             val data = LoadLinkData(
                 titleId = titleId,
-                episodeId = titleId,
-                scwsId = parsedJson.props.title.scws_id.toString()
+                episodeId = "0",
+                scwsId = parsedJson.props.title.scwsId.toString()
             ).toJson()
             return newMovieLoadResponse(title, data, TvType.Movie, data) {
                 this.year = year?.toIntOrNull()
-                this.plot = description
+                this.plot = titleId + " | " + parsedJson.props.title.scwsId.toString() + " - " + description
                 this.actors = actors
                 this.recommendations = recomm
                 this.tags = parsedJson.props.title.genres.mapNotNull { it.name }
@@ -245,16 +261,19 @@ class StreamingcommunityProvider : MainAPI() {
             )
         ).document
         val firstStageUrl = document.select("iframe").attr("src")
-        val documentVixcloud = app.get(
-            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
-        ).document.toString()
-        val test =
-            Regex("""window\.masterPlaylistParams = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
-                .replace("\n", " ").replace("'", "\"")
-        val tokens = parseJson<Tokens>(test)
-        val realUrl = "${
-            (firstStageUrl.substringBefore("?").replace("embed", "playlist"))
-        }?token=${tokens.token}&token360p=${tokens.token360p}&token480p=${tokens.token480p}&token720p=${tokens.token720p}&token1080p=${tokens.token1080p}&expires=${tokens.expires}&canCast=1&n=1"
+        val realUrl = transformUrl(firstStageUrl).toString()
+        //showToast(transformUrl(firstStageUrl).toString(), Toast.LENGTH_LONG)
+
+        //val documentVixcloud = app.get(
+        //    firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
+        //).document.toString()
+        //val test =
+        //    Regex("""window\.masterPlaylist = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
+        //        .replace("\n", " ").replace("'", "\"")
+        //val tokens = parseJson<Tokens>(test)
+        //val realUrl = "${
+        //    (firstStageUrl.substringBefore("?").replace("embed", "playlist"))
+        //}?token=${tokens.token}&token360p=${tokens.token360p}&token480p=${tokens.token480p}&token720p=${tokens.token720p}&token1080p=${tokens.token1080p}   "
         callback.invoke(
             ExtractorLink(
                 name,
