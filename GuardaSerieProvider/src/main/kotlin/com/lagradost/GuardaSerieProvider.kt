@@ -5,6 +5,7 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addRating
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.CommonActivity.showToast
 
 
 class GuardaSerieProvider : MainAPI() {
@@ -33,7 +34,7 @@ class GuardaSerieProvider : MainAPI() {
         val home = soup.select("div.mlnew").drop(1).map { series ->
             val title = series.selectFirst("div.mlnh-2")!!.text()
             val link = series.selectFirst("div.mlnh-2 > h2 > a")!!.attr("href")
-            val posterUrl = fixUrl(series.selectFirst("img")!!.attr("src")).replace("/60x85-0-85/", "/141x200-0-85/")
+            val posterUrl = fixUrl(series.selectFirst("img").attr("src")).replace("/60x85-0-85/", "/300x450-0-80/")
 
             newTvSeriesSearchResponse(
                 title,

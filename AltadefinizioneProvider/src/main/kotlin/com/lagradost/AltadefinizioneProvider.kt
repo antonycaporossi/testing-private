@@ -38,7 +38,7 @@ class AltadefinizioneProvider : MainAPI() {
     private fun Element.toSearchResult(): SearchResponse? {
         val title = this.selectFirst("img")?.attr("alt") ?: return null
         val link = this.selectFirst("a")?.attr("href") ?: return null
-        val image = mainUrl + this.selectFirst("img")?.attr("src")
+        val image = fixUrl(this.selectFirst("img").attr("src"))
         val quality = getQualityFromString(this.selectFirst("span")?.text())
         return newMovieSearchResponse(title, link, TvType.Movie) {
             this.posterUrl = image
