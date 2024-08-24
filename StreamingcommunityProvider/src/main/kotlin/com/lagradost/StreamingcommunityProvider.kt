@@ -19,8 +19,8 @@ import java.net.URLDecoder
 import org.json.JSONObject
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingcommunity.photos"
-    private var cdnUrl = "https://cdn.streamingcommunity.photos" // Images
+    override var mainUrl = "https://streamingcommunity.buzz"
+    private var cdnUrl = "https://cdn.streamingcommunity.buzz" // Images
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
