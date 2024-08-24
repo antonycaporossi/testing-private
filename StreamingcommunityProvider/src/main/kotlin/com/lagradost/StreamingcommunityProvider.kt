@@ -21,6 +21,7 @@ import org.json.JSONObject
 class StreamingcommunityProvider : MainAPI() {
     override var mainUrl = "https://streamingcommunity.buzz"
     private var cdnUrl = "https://cdn.streamingcommunity.buzz" // Images
+    private var xInertiaVersion = "daf71dec9cf0236345cef474b485dcb1"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
@@ -142,7 +143,7 @@ class StreamingcommunityProvider : MainAPI() {
         val url = "$mainUrl/search"
         val soup = app.get(
             url, params = mapOf("q" to query), headers = mapOf(
-                "X-Inertia" to "true", "X-Inertia-Version" to "db579ba3f2dcdf6a2910492a9a588de1"
+                "X-Inertia" to "true", "X-Inertia-Version" to xInertiaVersion
             )
         ).text
         val responseJson = parseJson<SearchResponseJson>(soup)
@@ -210,7 +211,7 @@ class StreamingcommunityProvider : MainAPI() {
                 val documentSeason = app.get(
                     "$realUrl/stagione-$season", referer = mainUrl, headers = mapOf(
                         "X-Inertia" to "true",
-                        "X-Inertia-Version" to "db579ba3f2dcdf6a2910492a9a588de1"
+                        "X-Inertia-Version" to xInertiaVersion
                     )
                 ).text
                 val parsedJsonSeason = parseJson<LoadResponseJson>(documentSeason)
