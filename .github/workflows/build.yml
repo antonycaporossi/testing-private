@@ -39,11 +39,17 @@ jobs:
 
       - name: Setup Android SDK (using older sdkmanager version)
         run: |
+          # Remove existing cmdline-tools directory to avoid conflicts
+          rm -rf $ANDROID_HOME/cmdline-tools/latest
           mkdir -p $ANDROID_HOME/cmdline-tools/latest
+          
+          # Download and extract the older version of sdkmanager
           wget https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
-          mv $ANDROID_HOME/cmdline-tools/latest/tools/* $ANDROID_HOME/cmdline-tools/latest/
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+          # Run sdkmanager and accept licenses
+          yes | $ANDROID_HOME/cmdline-tools/latest/tools/bin/sdkmanager --licenses
+
 
 
 
