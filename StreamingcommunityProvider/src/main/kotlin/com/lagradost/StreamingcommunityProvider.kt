@@ -21,7 +21,7 @@ import org.json.JSONObject
 class StreamingcommunityProvider : MainAPI() {
     override var mainUrl = "https://streamingcommunity.computer"
     private var cdnUrl = "https://cdn.streamingcommunity.computer" // Images
-    private var xInertiaVersion = "603978a140e727ab138cd99fe88495e1"
+    private var xInertiaVersion = "b18fe08ffd1b66daf6947eee4fadaa0b"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
