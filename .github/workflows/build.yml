@@ -32,26 +32,13 @@ jobs:
       - name: Clean old builds
         run: rm $GITHUB_WORKSPACE/builds/*.cs3 || true
 
-      - name: Setup JDK 11
+      - name: Setup JDK 12
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 12
 
-      - name: Setup Android SDK (using older sdkmanager version)
-        run: |
-          # Remove existing cmdline-tools directory to avoid conflicts
-          rm -rf $ANDROID_HOME/cmdline-tools/latest
-          mkdir -p $ANDROID_HOME/cmdline-tools/latest
-          
-          # Download and extract the older version of sdkmanager
-          wget https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
-
-          # Run sdkmanager and accept licenses
-          yes | $ANDROID_HOME/cmdline-tools/latest/tools/bin/sdkmanager --licenses
-
-
-
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
       - name: Build Plugins
         run: |
