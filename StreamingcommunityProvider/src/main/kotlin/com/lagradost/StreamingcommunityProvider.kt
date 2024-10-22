@@ -179,7 +179,14 @@ class StreamingcommunityProvider : MainAPI() {
 
         val document = app.get(realUrl, referer = mainUrl).document
         val encodedJson = document.select("div#app").attr("data-page")
-        val decodedJson = URLDecoder.decode(encodedJson, "UTF-8")
+        // Regular expression to match valid percent-encoded sequences
+        val validPercentEncoding = "%[0-9A-Fa-f]{2}".r
+
+        // Replace invalid percent encodings with an empty string
+        val cleanedJson = encodedJson.replaceAll("%(?![0-9A-Fa-f]{2})", "")
+
+        // Now safely decode the cleaned JSON
+        val decodeJson = URLDecoder.decode(cleanedJson, "UTF-8")
         val parsedJson = parseJson<LoadResponseJson>(decodedJson)
 
         val type = if (parsedJson.props.title.type == "tv") TvType.TvSeries else TvType.Movie
