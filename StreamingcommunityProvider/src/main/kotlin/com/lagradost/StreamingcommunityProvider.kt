@@ -186,7 +186,7 @@ class StreamingcommunityProvider : MainAPI() {
         val cleanedJson = encodedJson.replace("%(?![0-9A-Fa-f]{2})".toRegex(), "")
 
         // Now safely decode the cleaned JSON
-        val decodeJson = URLDecoder.decode(cleanedJson, "UTF-8")
+        val decodedJson = URLDecoder.decode(cleanedJson, "UTF-8")
         val parsedJson = parseJson<LoadResponseJson>(decodedJson)
 
         val type = if (parsedJson.props.title.type == "tv") TvType.TvSeries else TvType.Movie
