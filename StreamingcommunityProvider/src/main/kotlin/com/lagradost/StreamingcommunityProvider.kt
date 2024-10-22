@@ -179,11 +179,11 @@ class StreamingcommunityProvider : MainAPI() {
 
         val document = app.get(realUrl, referer = mainUrl).document
         val encodedJson = document.select("div#app").attr("data-page")
-        // Regular expression to match valid percent-encoded sequences
-        val validPercentEncoding = "%[0-9A-Fa-f]{2}".r
+
+        val validPercentEncoding = "%[0-9A-Fa-f]{2}".toRegex()
 
         // Replace invalid percent encodings with an empty string
-        val cleanedJson = encodedJson.replaceAll("%(?![0-9A-Fa-f]{2})", "")
+        val cleanedJson = encodedJson.replace("%(?![0-9A-Fa-f]{2})".toRegex(), "")
 
         // Now safely decode the cleaned JSON
         val decodeJson = URLDecoder.decode(cleanedJson, "UTF-8")
