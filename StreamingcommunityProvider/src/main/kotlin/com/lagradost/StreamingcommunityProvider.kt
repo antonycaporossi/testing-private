@@ -139,11 +139,27 @@ class StreamingcommunityProvider : MainAPI() {
         }
     }
 
+    private suspend fun getDecodedJson(url: String = mainUrl): LoadResponseJson {
+
+        // Otherwise, make a request to get the version
+        val document = app.get(url).document // Adjust URL if necessary
+        val encodedJson = document.select("div#app").attr("data-page")
+        
+        // Process JSON as needed to get the version
+        val cleanedJson = encodedJson.replace("%(?![0-9A-Fa-f]{2})".toRegex(), "")
+        val decodedJson = URLDecoder.decode(cleanedJson, "UTF-8")
+        val parsedJson = parseJson<LoadResponseJson>(decodedJson)
+
+        return parsedJson
+    }
+
     override suspend fun search(query: String): List<SearchResponse> {
         val url = "$mainUrl/search"
+        val parsedJson = getDecodedJson(url)
+        val xInertiaVersion_2 = parsedJson.version
         val soup = app.get(
             url, params = mapOf("q" to query), headers = mapOf(
-                "X-Inertia" to "true", "X-Inertia-Version" to xInertiaVersion
+                "X-Inertia" to "true", "X-Inertia-Version" to xInertiaVersion_2
             )
         ).text
         val responseJson = parseJson<SearchResponseJson>(soup)
@@ -177,17 +193,10 @@ class StreamingcommunityProvider : MainAPI() {
         val linkData = parseJson<LinkData>(url)
         val realUrl = "${this.mainUrl}/titles/${linkData.id}-${linkData.slug}"
 
-        val document = app.get(realUrl, referer = mainUrl).document
-        val encodedJson = document.select("div#app").attr("data-page")
 
-        val validPercentEncoding = "%[0-9A-Fa-f]{2}".toRegex()
+        val parsedJson = getDecodedJson(realUrl)
 
-        // Replace invalid percent encodings with an empty string
-        val cleanedJson = encodedJson.replace("%(?![0-9A-Fa-f]{2})".toRegex(), "")
-
-        // Now safely decode the cleaned JSON
-        val decodedJson = URLDecoder.decode(cleanedJson, "UTF-8")
-        val parsedJson = parseJson<LoadResponseJson>(decodedJson)
+        val xInertiaVersion_2 = parsedJson.version
 
         val type = if (parsedJson.props.title.type == "tv") TvType.TvSeries else TvType.Movie
 
@@ -218,7 +227,7 @@ class StreamingcommunityProvider : MainAPI() {
                 val documentSeason = app.get(
                     "$realUrl/stagione-$season", referer = mainUrl, headers = mapOf(
                         "X-Inertia" to "true",
-                        "X-Inertia-Version" to xInertiaVersion
+                        "X-Inertia-Version" to xInertiaVersion_2
                     )
                 ).text
                 val parsedJsonSeason = parseJson<LoadResponseJson>(documentSeason)
@@ -352,6 +361,7 @@ private data class LinkData(
 
 data class LoadResponseJson(
     @JsonProperty("props") var props: LoadProps = LoadProps(),
+    @JsonProperty("version") var version: String,
 
     )
 
