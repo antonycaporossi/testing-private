@@ -19,8 +19,8 @@ import java.net.URLDecoder
 import org.json.JSONObject
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingcommunity.computer"
-    private var cdnUrl = "https://cdn.streamingcommunity.computer" // Images
+    override var mainUrl = "https://streamingcommunity.asia"
+    private var cdnUrl = "https://cdn.streamingcommunity.asia" // Images
     private var xInertiaVersion = "759de90f13813ff6f03369b34b51a141"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
