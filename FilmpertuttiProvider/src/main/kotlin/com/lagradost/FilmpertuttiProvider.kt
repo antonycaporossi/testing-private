@@ -16,7 +16,7 @@ import com.lagradost.cloudstream3.network.CloudflareKiller
 
 class FilmpertuttiProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://filmpertutti.team"
+    override var mainUrl = "https://filmpertutti.motorcycles"
     override var name = "FilmPerTutti"
     override val hasMainPage = true
     override val hasChromecastSupport = true
