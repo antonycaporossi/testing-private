@@ -278,19 +278,32 @@ class StreamingcommunityProvider : MainAPI() {
             )
         ).document
         val firstStageUrl = document.select("iframe").attr("src")
-        val realUrl = transformUrl(firstStageUrl).toString()
-        //showToast(transformUrl(firstStageUrl).toString(), Toast.LENGTH_LONG)
 
-        //val documentVixcloud = app.get(
-        //    firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
-        //).document.toString()
-        //val test =
-        //    Regex("""window\.masterPlaylist = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
-        //        .replace("\n", " ").replace("'", "\"")
-        //val tokens = parseJson<Tokens>(test)
-        //val realUrl = "${
-        //    (firstStageUrl.substringBefore("?").replace("embed", "playlist"))
-        //}?token=${tokens.token}&token360p=${tokens.token360p}&token480p=${tokens.token480p}&token720p=${tokens.token720p}&token1080p=${tokens.token1080p}   "
+
+
+        //val embedContent = app.get(firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent))
+
+
+        //showToast(embedContent.toString(), Toast.LENGTH_LONG)
+        //val realUrl = firstStageUrl
+        //val realUrl = transformUrl(firstStageUrl).toString()
+
+        val documentVixcloud = app.get(
+            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
+        ).document.toString()
+        val test =
+            Regex("""window\.masterPlaylist = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
+
+        val token = test.substringAfter("'token': '").substringBefore("',")
+        val expires = test.substringAfter("'expires': '").substringBefore("',")
+        val asn = test.substringAfter("'asn': '").substringBefore("',")
+        
+        //val tokens: Tokens = parseJson(test)
+        //val realUrl = "${(firstStageUrl.substringBefore("?").replace("embed", "playlist"))}?token=1"
+
+        val realUrl = "${
+            (firstStageUrl.substringBefore("?").replace("embed", "playlist"))
+        }?token=${token}&h=1&expires=${expires}&asn=${asn}"
         callback.invoke(
             ExtractorLink(
                 name,
@@ -456,9 +469,16 @@ private data class LoadLinkData(
 
 private data class Tokens(
     @JsonProperty("token") var token: String? = null,
+    @JsonProperty("params") var params: Params? = null,
     @JsonProperty("token360p") var token360p: String? = null,
     @JsonProperty("token480p") var token480p: String? = null,
     @JsonProperty("token720p") var token720p: String? = null,
     @JsonProperty("token1080p") var token1080p: String? = null,
+    @JsonProperty("expires") var expires: String? = null
+)
+
+
+private data class Params(
+    @JsonProperty("token") var token: String? = null,
     @JsonProperty("expires") var expires: String? = null
 )
