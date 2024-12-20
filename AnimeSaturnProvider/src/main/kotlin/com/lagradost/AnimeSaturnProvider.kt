@@ -13,7 +13,7 @@ import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.nodes.Element
 
 class AnimeSaturnProvider : MainAPI() {
-    override var mainUrl = "https://www.animesaturn.co"
+    override var mainUrl = "https://www.animesaturn.cx"
     override var name = "AnimeSaturn"
     override var lang = "it"
     override val hasMainPage = true
@@ -221,8 +221,8 @@ class AnimeSaturnProvider : MainAPI() {
         val episodeUrl: String?
         var isM3U8 = false
 
-        if (episodePage.select("video.afterglow > source").isNotEmpty()) // Old player
-            episodeUrl = episodePage.select("video.afterglow > source").first()!!.attr("src")
+        if (episodePage.select("video > source").isNotEmpty()) // Old player
+            episodeUrl = episodePage.select("video > source").first()!!.attr("src")
         else { // New player
             val script = episodePage.select("script").find {
                 it.toString().contains("jwplayer('player_hls').setup({")
@@ -237,7 +237,7 @@ class AnimeSaturnProvider : MainAPI() {
                 name,
                 episodeUrl!!,
                 isM3u8 = isM3U8,
-                referer = "https://www.animesaturn.io/", //Some servers need the old host as referer, and the new ones accept it too
+                referer = data, //Some servers need the old host as referer, and the new ones accept it too
                 quality = Qualities.Unknown.value
             )
         )
