@@ -27,22 +27,21 @@ class FilmpertuttiProvider : MainAPI() {
     override var sequentialMainPage = true
     override var sequentialMainPageDelay: Long = 50
     override val mainPage = mainPageOf(
-        Pair("$mainUrl/category/film/page/", "Film Popolari"),
-        Pair("$mainUrl/category/serie-tv/page/", "Serie Tv Popolari"),
-        Pair("$mainUrl/prime-visioni/", "Ultime uscite")
+        Pair("https://filmpertutti.motorcycles/category/film/", "Film Popolari"),
+        Pair("https://filmpertutti.motorcycles/category/serie-tv/", "Serie Tv Popolari"),
+        Pair("https://filmpertutti.motorcycles/category/ora-al-cinema/", "Ora al cinema")
     )
 
     override suspend fun getMainPage(
         page: Int,
         request: MainPageRequest
     ): HomePageResponse {
-        val url = request.data + page
+        val url = request.data
         val soup = app.get(url).document
-        val home = soup.select("ul.posts > li").map {
-            val title = it.selectFirst("div.title")!!.text().substringBeforeLast("(")
-                .substringBeforeLast("[")
+        val home = soup.select("article.post").map {
+            val title = ""
             val link = it.selectFirst("a")!!.attr("href")
-            val image = it.selectFirst("a")!!.attr("data-thumbnail")
+            val image = it.selectFirst("img")!!.attr("src")
             val qualitydata = it.selectFirst("div.hd")
             val quality = if (qualitydata != null) {
                 getQualityFromString(qualitydata.text())
@@ -65,18 +64,15 @@ class FilmpertuttiProvider : MainAPI() {
         val queryformatted = query.replace(" ", "+")
         val url = "$mainUrl/?s=$queryformatted"
         val doc = app.get(url).document
-        return doc.select("ul.posts > li").map {
-            val title = it.selectFirst("div.title")!!.text().substringBeforeLast("(")
-                .substringBeforeLast("[")
+        return doc.select("article.post").map {
+            val title = it.selectFirst(".elementor-post__title a")!!.text()
             val link = it.selectFirst("a")!!.attr("href")
-            val image = it.selectFirst("a")!!.attr("data-thumbnail")
-            val quality = getQualityFromString(it.selectFirst("div.hd")?.text())
+            val image = it.selectFirst("img")!!.attr("src")
 
             MovieSearchResponse(
                 title,
                 link,
                 this.name,
-                quality = quality,
                 posterUrl = image
             )
         }
@@ -84,30 +80,18 @@ class FilmpertuttiProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val document = app.get(url).document
-        val type =
-            if (document.selectFirst("a.taxonomy.category")!!.attr("href").contains("serie-tv")
-                    .not()
-            ) TvType.Movie else TvType.TvSeries
-        val title = document.selectFirst("#content > h1")!!.text().substringBeforeLast("(")
-            .substringBeforeLast("[")
+        val type = if (url.contains("serie-tv")) TvType.TvSeries else TvType.Movie
+        val title = document.selectFirst("title")!!.text().substringBefore(" Streaming")
+        val description = document.select(".short-synopsis, .rest-synopsis").text()
 
-        val descriptionindex = document.select("div.meta > div > div").indexOfFirst { it.getElementsContainingText("Trama").isNotEmpty() }
-        val description = document.select("div.meta > div > div")[descriptionindex +1].text()
+        val rating = document.selectFirst(".imdb-votes")?.text()
 
-        val rating = document.selectFirst("div.rating > div.value")?.text()
-
-        val year =
-            document.selectFirst("#content > h1")?.text()?.substringAfterLast("(")
+        val year = title.substringAfterLast("(")
                 ?.filter { it.isDigit() }?.toIntOrNull()
-                ?: description.substringAfter("trasmessa nel").take(6).filter { it.isDigit() }
-                    .toIntOrNull() ?: (document.selectFirst("i.fa.fa-calendar.fa-fw")?.parent()
-                    ?.nextSibling() as Element?)?.text()?.substringAfterLast(" ")
-                    ?.filter { it.isDigit() }?.toIntOrNull()
 
-        val horizontalPosterData = document.selectFirst("body > main")?.attr("style")?:""
-        val poster =
-            Regex("url\\('(.*)'").find(horizontalPosterData)?.groups?.lastOrNull()?.value?:
-            document.selectFirst("div.meta > div > img")?.attr("src")
+    
+        //val horizontalPosterData = document.selectFirst("body > main")?.attr("style")?:""
+        val poster = document.html().substringAfter("background-image: url('").substringBefore("');");
 
 
         val trailerurl =
@@ -118,27 +102,19 @@ class FilmpertuttiProvider : MainAPI() {
         if (type == TvType.TvSeries) {
 
             val episodeList = ArrayList<Episode>()
-            document.select("div.accordion-item").filter { a ->
-                a.selectFirst("#season > ul > li.s_title > span")!!.text().isNotEmpty()
-            }.map { element ->
-                val season =
-                    element.selectFirst("#season > ul > li.s_title > span")!!.text().toInt()
-                element.select("div.episode-wrap").map { episode ->
-                    val href =
-                        episode.select("#links > div > div > table > tbody:nth-child(2) > tr")
-                            .map { it.selectFirst("a")!!.attr("href") }.toJson()
-                    val epNum = episode.selectFirst("li.season-no")!!.text().substringAfter("x")
-                        .filter { it.isDigit() }.toIntOrNull()
-                    val epTitle = episode.selectFirst("li.other_link > a")?.text()
 
-                    val posterUrl = episode.selectFirst("figure > img")?.attr("data-src")
+            document.select(".season-details > div").map{ seasonDiv ->
+                val season =        seasonDiv.attr("id").substringAfter("_").toInt() +1 
+                    seasonDiv.select("ul li").apmap{ episode -> 
+                    val href = episode.selectFirst("a")!!.attr("href")
+                    val epNum = episode.selectFirst(".episode-title").text().substringBefore(".").toIntOrNull()
+                    val epTitle = episode.selectFirst(".episode-title").text().substringAfter(".")
                     episodeList.add(
                         Episode(
                             href,
                             epTitle,
                             season,
                             epNum,
-                            posterUrl,
                         )
                     )
                 }
@@ -155,14 +131,7 @@ class FilmpertuttiProvider : MainAPI() {
             }
         } else {
 
-            val urls0 = document.select("div.embed-player")
-            val urls = if (urls0.isNotEmpty()) {
-                urls0.map { it.attr("data-id") }.toJson()
-            } else {
-                document.select("#info > ul > li ").mapNotNull { it.selectFirst("a")?.attr("href") }
-                    .toJson()
-            }
-
+            val urls = url+"?show_video=true"
             return newMovieLoadResponse(
                 title,
                 url,
@@ -185,10 +154,16 @@ class FilmpertuttiProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        tryParseJson<List<String>>(data)?.apmap { id ->
-            val link = ShortLink.unshorten(id).trim().replace("/v/", "/e/").replace("/f/", "/e/")
-            loadExtractor(link, data, subtitleCallback, callback)
+        val f = app.get(data).document
+        val iframeContent = app.get(f.selectFirst("iframe")!!.attr("src")).document
+
+        iframeContent.select(".container div[rel=nofollow]").map {
+            loadExtractor(it.attr("meta-link"), data, subtitleCallback, callback)
         }
+        //tryParseJson<List<String>>(data)?.apmap { id ->
+        //    val link = ShortLink.unshorten(id).trim().replace("/v/", "/e/").replace("/f/", "/e/")
+        //    loadExtractor(link, data, subtitleCallback, callback)
+        //}
         return true
     }
 }
