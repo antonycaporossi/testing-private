@@ -294,6 +294,7 @@ class StreamingcommunityProvider : MainAPI() {
         val test =
             Regex("""window\.masterPlaylist = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
 
+        val urld = documentVixcloud.substringAfter("url: '").substringBefore("',")
         val token = test.substringAfter("'token': '").substringBefore("',")
         val expires = test.substringAfter("'expires': '").substringBefore("',")
         val asn = test.substringAfter("'asn': '").substringBefore("',")
@@ -301,9 +302,10 @@ class StreamingcommunityProvider : MainAPI() {
         //val tokens: Tokens = parseJson(test)
         //val realUrl = "${(firstStageUrl.substringBefore("?").replace("embed", "playlist"))}?token=1"
 
-        val realUrl = "${
-            (firstStageUrl.substringBefore("?").replace("embed", "playlist"))
-        }?token=${token}&h=1&expires=${expires}&asn=${asn}"
+        val separator = if (urld.contains('?')) "&" else "?"
+        val asnPart = if (asn.isNotEmpty()) "&asn=$asn" else ""
+        val realUrl = "$urld$separator" +
+            "token=$token&expires=$expires$asnPart"
         callback.invoke(
             ExtractorLink(
                 name,
