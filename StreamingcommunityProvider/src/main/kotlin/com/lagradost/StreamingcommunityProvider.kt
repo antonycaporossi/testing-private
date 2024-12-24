@@ -304,8 +304,9 @@ class StreamingcommunityProvider : MainAPI() {
 
         val separator = if (urld.contains('?')) "&" else "?"
         val asnPart = if (asn.isNotEmpty()) "&asn=$asn" else ""
+        val h = if(firstStageUrl.contains("canPlayFHD")) "&h=1" else ""
         val realUrl = "$urld$separator" +
-            "token=$token&expires=$expires$asnPart"
+            "token=$token&expires=$expires$asnPart$h"
         callback.invoke(
             ExtractorLink(
                 name,
