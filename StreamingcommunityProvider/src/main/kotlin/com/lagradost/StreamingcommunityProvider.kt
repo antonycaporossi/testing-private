@@ -17,6 +17,7 @@ import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.CommonActivity.showToast
 import java.net.URLDecoder
 import org.json.JSONObject
+import com.lagradost.cloudstream3.network.CloudflareKiller
 
 class StreamingcommunityProvider : MainAPI() {
     override var mainUrl = "https://streamingcommunity.prof"
@@ -26,6 +27,7 @@ class StreamingcommunityProvider : MainAPI() {
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
     override var lang = "it"
+    private val interceptor = CloudflareKiller()
     override val hasMainPage = true
     override val mainPage = mainPageOf(
         "{\"name\":\"trending\",\"genre\":null}" to "I titoli del momento",
@@ -76,7 +78,9 @@ class StreamingcommunityProvider : MainAPI() {
             )
             val items: List<HomePageList> = postDatas.map { postData ->
                 val soup = app.post(
-                    url, json = JSONObject(postData)
+                    url,
+                    interceptor = interceptor,
+                    json = JSONObject(postData)
                 ).text
                 val jsonResponse = parseJson<List<MainPageResponse>>(soup)
                 jsonResponse.map { genre ->
@@ -103,7 +107,7 @@ class StreamingcommunityProvider : MainAPI() {
                 "trending", "latest" -> mapOf("offset" to offset)
                 else -> mapOf("offset" to offset, "g" to requestJson.genre)
             }
-            val soup = app.get(url, params = params).text
+            val soup = app.get(url, params = params, interceptor = interceptor).text
             val jsonResponse = parseJson<MainPageResponse>(soup)
             val items: List<HomePageList> = arrayListOf(
                 HomePageList(jsonResponse.label, jsonResponse.titles.map { show -> //array of title
@@ -130,11 +134,11 @@ class StreamingcommunityProvider : MainAPI() {
 
         return if (isMovie) {
             newMovieSearchResponse(title, link, TvType.Movie) {
-                addPoster(posterUrl)
+                addPoster(url = posterUrl, headers = interceptor.getCookieHeaders(mainUrl).toMap())
             }
         } else {
             newTvSeriesSearchResponse(title, link, TvType.TvSeries) {
-                addPoster(posterUrl)
+                addPoster(url = posterUrl, headers = interceptor.getCookieHeaders(mainUrl).toMap())
             }
         }
     }
@@ -142,7 +146,7 @@ class StreamingcommunityProvider : MainAPI() {
     private suspend fun getDecodedJson(url: String = mainUrl): LoadResponseJson {
 
         // Otherwise, make a request to get the version
-        val document = app.get(url).document // Adjust URL if necessary
+        val document = app.get(url, interceptor = interceptor).document // Adjust URL if necessary
         val encodedJson = document.select("div#app").attr("data-page")
         
         // Process JSON as needed to get the version
@@ -160,7 +164,8 @@ class StreamingcommunityProvider : MainAPI() {
         val soup = app.get(
             url, params = mapOf("q" to query), headers = mapOf(
                 "X-Inertia" to "true", "X-Inertia-Version" to xInertiaVersion_2
-            )
+            ),
+            interceptor = interceptor
         ).text
         val responseJson = parseJson<SearchResponseJson>(soup)
         return responseJson.props.titles.map { it.toSearchResult() }
@@ -225,10 +230,13 @@ class StreamingcommunityProvider : MainAPI() {
 
             val episodeList = (1..seasonsCountInt).map { season ->
                 val documentSeason = app.get(
-                    "$realUrl/stagione-$season", referer = mainUrl, headers = mapOf(
+                    "$realUrl/stagione-$season",
+                    referer = mainUrl,
+                    headers = mapOf(
                         "X-Inertia" to "true",
                         "X-Inertia-Version" to xInertiaVersion_2
-                    )
+                    ),
+                    interceptor = interceptor
                 ).text
                 val parsedJsonSeason = parseJson<LoadResponseJson>(documentSeason)
                 parsedJsonSeason.props.loadedSeason!!.episodes.map { it.toEpisode(titleId, season) }
@@ -240,7 +248,7 @@ class StreamingcommunityProvider : MainAPI() {
                 this.actors = actors
                 this.recommendations = recomm
                 this.tags = parsedJson.props.title.genres.mapNotNull { it.name }
-                addPoster(poster)
+                addPoster(url = poster, headers = interceptor.getCookieHeaders(mainUrl).toMap())
                 addRating(rating)
                 addTrailer(trailer)
             }
@@ -256,7 +264,7 @@ class StreamingcommunityProvider : MainAPI() {
                 this.actors = actors
                 this.recommendations = recomm
                 this.tags = parsedJson.props.title.genres.mapNotNull { it.name }
-                addPoster(poster)
+                addPoster(url = poster, headers = interceptor.getCookieHeaders(mainUrl).toMap())
                 addRating(rating)
                 addTrailer(trailer)
             }
@@ -275,7 +283,8 @@ class StreamingcommunityProvider : MainAPI() {
             referer = mainUrl,
             headers = mapOf(
                 "User-Agent" to userAgent
-            )
+            ),
+            interceptor = interceptor
         ).document
         val firstStageUrl = document.select("iframe").attr("src")
 
@@ -289,7 +298,10 @@ class StreamingcommunityProvider : MainAPI() {
         //val realUrl = transformUrl(firstStageUrl).toString()
 
         val documentVixcloud = app.get(
-            firstStageUrl, referer = mainUrl, headers = mapOf("User-Agent" to userAgent)
+            firstStageUrl,
+            referer = mainUrl,
+            headers = mapOf("User-Agent" to userAgent),
+            interceptor = interceptor
         ).document.toString()
         val test =
             Regex("""window\.masterPlaylist = (\{[^}]+\})""").find(documentVixcloud)!!.groupValues[1].trim()
