@@ -41,7 +41,7 @@ subprojects {
     }
 
     android {
-	namespace = "com.testingprivate"
+	namespace = "it.testingprivate"
         compileSdkVersion(35)
 
         defaultConfig {
