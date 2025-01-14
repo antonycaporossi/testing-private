@@ -12,7 +12,7 @@ import org.jsoup.nodes.Element
 
 class AltadefinizioneProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://altadefinizione.my"
+    override var mainUrl = "https://altadefinizione.now"
     override var name = "Altadefinizione"
     override val hasMainPage = true
     override val hasChromecastSupport = true
@@ -21,7 +21,7 @@ class AltadefinizioneProvider : MainAPI() {
     )
 
     override val mainPage = mainPageOf(
-        Pair("$mainUrl/cerca/anno/2022/page/", "Ultimi Film"),
+        Pair("$mainUrl/cerca/anno/2024/page/", "Ultimi Film"),
         Pair("$mainUrl/cerca/openload-quality/HD/page/", "Film in HD"),
         Pair("$mainUrl/cinema/page/", "Ora al cinema")
     )
@@ -38,7 +38,7 @@ class AltadefinizioneProvider : MainAPI() {
     private fun Element.toSearchResult(): SearchResponse? {
         val title = this.selectFirst("img")?.attr("alt") ?: return null
         val link = this.selectFirst("a")?.attr("href") ?: return null
-        val image = fixUrl(this.selectFirst("img").attr("src"))
+        val image = fixUrl(this.selectFirst("img")?.attr("src") ?: "")
         val quality = getQualityFromString(this.selectFirst("span")?.text())
         return newMovieSearchResponse(title, link, TvType.Movie) {
             this.posterUrl = image
@@ -84,11 +84,15 @@ class AltadefinizioneProvider : MainAPI() {
             }
         val tags: List<String> = document.select("#details > li:nth-child(1) > a").map { it.text() }
         val trailerUrl = document.selectFirst("#showtrailer > div > div > iframe")?.attr("src")
+        val iframeSrc = document
+        .select("iframe:not([id=mirrorFrame])")
+        .first() // Get the first matching iframe
+        ?.attr("src")
         return newMovieLoadResponse(
             title,
             url,
             TvType.Movie,
-            url
+            iframeSrc
         ) {
             this.year = year
             this.plot = description
@@ -109,7 +113,8 @@ class AltadefinizioneProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         val doc = app.get(data).document
-        if (doc.select("div.guardahd-player").isNullOrEmpty()) {
+        loadExtractor("prova", data, subtitleCallback, callback)
+        /*if (doc.select("div.guardahd-player").isNullOrEmpty()) {
             val videoUrl =
                 doc.select("input").last { it.hasAttr("data-mirror") }.attr("value")
             loadExtractor(videoUrl, data, subtitleCallback, callback)
@@ -122,7 +127,7 @@ class AltadefinizioneProvider : MainAPI() {
             docLinks.select("body > div > ul > li").forEach {
                 loadExtractor(fixUrl(it.attr("data-link")), data, subtitleCallback, callback)
             }
-        }
+        }*/
         return true
     }
 }

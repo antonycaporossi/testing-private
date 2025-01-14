@@ -34,7 +34,7 @@ class GuardaSerieProvider : MainAPI() {
         val home = soup.select("div.mlnew").drop(1).map { series ->
             val title = series.selectFirst("div.mlnh-2")!!.text()
             val link = series.selectFirst("div.mlnh-2 > h2 > a")!!.attr("href")
-            val posterUrl = fixUrl(series.selectFirst("img").attr("src")).replace("/60x85-0-85/", "/300x450-0-80/")
+            val posterUrl = fixUrl(series.selectFirst("img")?.attr("src") ?: "").replace("/60x85-0-85/", "/300x450-0-80/")
 
             newTvSeriesSearchResponse(
                 title,

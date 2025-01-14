@@ -107,8 +107,8 @@ class FilmpertuttiProvider : MainAPI() {
                 val season =        seasonDiv.attr("id").substringAfter("_").toInt() +1 
                     seasonDiv.select("ul li").apmap{ episode -> 
                     val href = episode.selectFirst("a")!!.attr("href")
-                    val epNum = episode.selectFirst(".episode-title").text().substringBefore(".").toIntOrNull()
-                    val epTitle = episode.selectFirst(".episode-title").text().substringAfter(".")
+                    val epNum = episode.selectFirst(".episode-title")?.text()?.substringBefore(".")?.toIntOrNull()
+                    val epTitle = episode.selectFirst(".episode-title")?.text()?.substringAfter(".")
                     episodeList.add(
                         Episode(
                             href,
