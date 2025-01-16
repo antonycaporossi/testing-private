@@ -1,4 +1,4 @@
-package com.lagrados
+package com.lagradost
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

@@ -1,4 +1,4 @@
-package com.lagrados
+package com.lagradost
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.newEpisode

@@ -1,4 +1,4 @@
-package com.lagrados
+package com.lagradost
 
 import android.util.Base64
 import com.lagradost.api.Log

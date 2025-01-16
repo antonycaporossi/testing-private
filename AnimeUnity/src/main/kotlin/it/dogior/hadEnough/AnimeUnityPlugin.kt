@@ -1,14 +1,12 @@
 package com.lagradost
 
+import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
-import android.content.Context
 
 @CloudstreamPlugin
-class CalcioStreamingPlugin: Plugin() {
-
+class AnimeUnityPlugin : Plugin() {
     override fun load(context: Context) {
-        // All providers should be added in this manner
-        registerMainAPI(CalcioStreaming())
+        registerMainAPI(AnimeUnity())
     }
 }
