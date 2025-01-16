@@ -1,14 +1,15 @@
 
-package com.lagradost
+package com.lagrados
 
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
 import android.content.Context
 
 @CloudstreamPlugin
-class AnimeWorldProviderPlugin: Plugin() {
+class AnimeWorldPlugin: Plugin() {
     override fun load(context: Context) {
         // All providers should be added in this manner. Please don't edit the providers list directly.
-        registerMainAPI(AnimeWorldProvider())
+        registerMainAPI(AnimeWorldDub())
+        registerMainAPI(AnimeWorldSub())
     }
 }

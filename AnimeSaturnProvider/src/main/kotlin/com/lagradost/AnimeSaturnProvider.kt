@@ -11,6 +11,8 @@ import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.nodes.Element
+import com.lagradost.api.Log
+import com.lagradost.cloudstream3.CommonActivity.showToast
 
 class AnimeSaturnProvider : MainAPI() {
     override var mainUrl = "https://www.animesaturn.cx"
@@ -18,7 +20,14 @@ class AnimeSaturnProvider : MainAPI() {
     override var lang = "it"
     override val hasMainPage = true
     override val hasQuickSearch = true
+    private val cookie = "ASNew-cD=0d9f388b8e4fb700a2344568f983a916; PHPSESSID=dkuah3sbbk2pv5m49vgba66ad0"
+    private val userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 
+    private val headers = mapOf(
+        "cookie" to cookie,
+        "user-agent" to userAgent,
+        "x-requested-with" to "XMLHttpRequest"
+    )
     override val supportedTypes = setOf(
         TvType.Anime,
         TvType.AnimeMovie,
@@ -90,8 +99,8 @@ class AnimeSaturnProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request : MainPageRequest): HomePageResponse {
         val list = mutableListOf<HomePageList>()
 
-        val documentLastEpisode = app.get("$mainUrl/fetch_pages.php?request=episodes",
-            headers = mapOf("x-requested-with" to "XMLHttpRequest")
+        val documentLastEpisode = app.get("http://www.animesaturn.cx/fetch_pages.php?request=episodes",
+            headers = headers
         ).document
         val lastedEpisode = documentLastEpisode.select(".anime-card").mapNotNull {
             val url = it.select("a").first()?.attr("href")?.let { href ->
@@ -111,9 +120,9 @@ class AnimeSaturnProvider : MainAPI() {
         }
         list.add(HomePageList("Ultimi episodi", lastedEpisode, isHorizontalImages = true))
 
-        val document = app.get(mainUrl).document
-        document.select("div.container:has(span.badge-saturn)").forEach {
-            val tabName = it.select("span.badge-saturn").first()!!.text()
+        val document = app.get(mainUrl, headers = headers).document
+        document.select("div.container:has(span.saturn-title-special)").forEach {
+            val tabName = it.select("span.saturn-title-special").first()!!.text()
             if (tabName.equals("Ultimi episodi")) return@forEach
 
             val results = it.select(".main-anime-card").mapNotNull { card ->
@@ -125,7 +134,7 @@ class AnimeSaturnProvider : MainAPI() {
     }
 
     override suspend fun quickSearch(query: String): List<SearchResponse>? {
-        val quickSearchJ = app.get("$mainUrl/index.php?search=1&key=$query").text
+        val quickSearchJ = app.get("$mainUrl/index.php?search=1&key=$query", headers = headers).text
         return tryParseJson<List<QuickSearchParse>>(quickSearchJ)?.map {
             newAnimeSearchResponse(it.name.removeSuffix("(ITA)"), it.link, TvType.Anime) {
                 addDubStatus(it.name.contains(" (ITA)"))
@@ -136,14 +145,14 @@ class AnimeSaturnProvider : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val document = app.get("$mainUrl/animelist?search=$query").document
+        val document = app.get("$mainUrl/animelist?search=$query", headers = headers).document
         return document.select("div.item-archivio").map {
             it.toSearchResult()
         }
     }
 
     override suspend fun load(url: String): LoadResponse {
-        val document = app.get(url).document
+        val document = app.get(url, headers = headers).document
 
         val title = document.select("img.cover-anime").first()!!.attr("alt").removeSuffix("(ITA)")
         val japTitle = document.select("div.box-trasparente-alternativo").first()!!.text().removeSuffix("(ITA)")
@@ -212,12 +221,12 @@ class AnimeSaturnProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val page = app.get(data).document
+        val page = app.get(data, headers = headers).document
         val episodeLink = page.select("div.card-body > a[href]").find {it1 ->
             it1.attr("href").contains("watch?")
         }?.attr("href") ?: return false
 
-        val episodePage = app.get(episodeLink).document
+        val episodePage = app.get(episodeLink, headers = headers).document
         val episodeUrl: String?
         var isM3U8 = false
 
