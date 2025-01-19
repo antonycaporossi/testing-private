@@ -13,6 +13,10 @@ import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.nodes.Element
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.CommonActivity.showToast
+import org.mozilla.javascript.ConsString
+import org.mozilla.javascript.Context
+import com.lagradost.nicehttp.NiceResponse
+import org.mozilla.javascript.Scriptable
 
 class AnimeSaturnProvider : MainAPI() {
     override var mainUrl = "https://www.animesaturn.cx"
@@ -20,14 +24,6 @@ class AnimeSaturnProvider : MainAPI() {
     override var lang = "it"
     override val hasMainPage = true
     override val hasQuickSearch = true
-    private val cookie = "ASNew-cD=0d9f388b8e4fb700a2344568f983a916; PHPSESSID=dkuah3sbbk2pv5m49vgba66ad0"
-    private val userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-
-    private val headers = mapOf(
-        "cookie" to cookie,
-        "user-agent" to userAgent,
-        "x-requested-with" to "XMLHttpRequest"
-    )
     override val supportedTypes = setOf(
         TvType.Anime,
         TvType.AnimeMovie,
@@ -41,12 +37,51 @@ class AnimeSaturnProvider : MainAPI() {
     )
     
     companion object {
+        private var mainUrl = AnimeSaturnProvider().mainUrl
+        private var securityCookie = ""
+        private val userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
+        private var headers = mutableMapOf(
+                "cookie" to securityCookie,
+                "user-agent" to userAgent,
+                "x-requested-with" to "XMLHttpRequest"
+            )
+        private suspend fun request(url: String): NiceResponse {
+            if (securityCookie.isEmpty()) {
+                securityCookie = getCookies(mainUrl)
+                headers["cookie"] = securityCookie.toString()
+            }
+            return app.get(url, headers = headers)
+        }
+
+        
         fun getStatus(t: String?): ShowStatus? {
             return when (t?.lowercase()) {
                 "finito" -> ShowStatus.Completed
                 "in corso" -> ShowStatus.Ongoing
                 else -> null
             }
+        }
+        private suspend fun getCookies(url: String): String {
+            val rhino = Context.enter()
+            rhino.optimizationLevel = -1
+            val scope: Scriptable = rhino.initSafeStandardObjects()
+
+            val slowAes = app.get("$mainUrl/min.js").text
+            val doc = "var document = {};"
+
+            val siteScriptRegex = Regex("""<script>(.*)\+";\s*path""")
+            val html = app.get(url, headers = headers).text
+            val siteScript = siteScriptRegex.find(html)?.groupValues?.getOrNull(1)!!.trim()
+            rhino.evaluateString(
+                scope,
+                "$doc;$slowAes;$siteScript",
+                "JavaScript",
+                1,
+                null
+            )
+            val jsEval = scope.get("document", scope) as? Scriptable
+            val cookies = jsEval?.get("cookie", jsEval) as? ConsString
+            return cookies?.toString() ?: ""
         }
     }
 
@@ -98,10 +133,8 @@ class AnimeSaturnProvider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request : MainPageRequest): HomePageResponse {
         val list = mutableListOf<HomePageList>()
-
-        val documentLastEpisode = app.get("http://www.animesaturn.cx/fetch_pages.php?request=episodes",
-            headers = headers
-        ).document
+        val documentLastEpisode = request("$mainUrl/fetch_pages.php?request=episodes",).document
+        
         val lastedEpisode = documentLastEpisode.select(".anime-card").mapNotNull {
             val url = it.select("a").first()?.attr("href")?.let { href ->
                 href.split("-ep-")[0].replace("/ep/", "/anime/")

@@ -66,11 +66,13 @@ abstract class AnimeWorldCore : MainAPI() {
 
         private suspend fun getSecurityCookie(): String {
             val r = app.get(mainUrl, allowRedirects = false)
-//            Log.d("AnimeWorld:getSecurityCookie", "Cookie: ${r.headers["set-cookie"]}")
-            val securityCookie = r.headers["set-cookie"]!!.substringBefore(";")
+
+            val securityCookie =
+                r.document.selectFirst("script")!!.data().substringAfter("\"").substringBefore(" ;")
 //            Log.d("AnimeWorld:getSecurityCookie", "Cookie: ${securityCookie}")
-            val r2 = app.get("$mainUrl/?d=1", headers = headers, allowRedirects = false)
-//            Log.d("AnimeWorld:getSecurityCookie", "Cookie: ${r2.headers["set-cookie"]}")
+            val h = mapOf("Cookie" to securityCookie)
+            val r2 = app.get("$mainUrl/?d=1", headers = h, allowRedirects = true)
+//            Log.d("AnimeWorld:getSecurityCookie", "Request: ${r2.body.string()}")
             val sessionCookie = r2.headers["set-cookie"]!!.substringBefore(";")
             return "$securityCookie; $sessionCookie"
         }
