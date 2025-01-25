@@ -19,6 +19,7 @@ class TvItalianaProvider : MainAPI() {
     override var name = "TvItaliana"
     override val hasMainPage = true
     override val hasChromecastSupport = true
+    override var mainUrl = "https://raw.githubusercontent.com/Tundrak/IPTV-Italia/main/iptvitaplus.m3u"
     override val supportedTypes = setOf(
         TvType.Live,
     )
@@ -110,8 +111,7 @@ class TvItalianaProvider : MainAPI() {
 
     override suspend fun search(query: String): List<SearchResponse> {
         val data = IptvPlaylistParser().parseM3U(app.get(mainUrl).text)
-
-        return data.items.filter { it.attributes["tvg-id"]?.contains(query) ?: false }.map { channel ->
+        return data.items.filter { it.title?.contains(query, ignoreCase = true) ?: false }.map { channel ->
             val streamurl = channel.url.toString()
             val channelname = channel.attributes["tvg-id"].toString()
             val posterurl = channel.attributes["tvg-logo"].toString()
