@@ -5,6 +5,10 @@ import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
 import com.lagradost.cloudstream3.network.CloudflareKiller
+import com.lagradost.cloudstream3.utils.AppUtils.parseJson
+import com.lagradost.cloudstream3.utils.AppUtils.toJson
+import android.util.Log
+
 
 
 class TantifilmProvider : MainAPI() {
@@ -19,9 +23,9 @@ class TantifilmProvider : MainAPI() {
     )
 
     override val mainPage = mainPageOf(
-        Pair("$mainUrl/watch-genre/al-cinema/page/", "Ultimi Film"),
+        Pair("$mainUrl/cinema/page/", "Ultimi Film"),
         Pair("$mainUrl/serie-tv/page/", "Ultime Serie Tv"),
-        Pair("$mainUrl/watch-genre/film-aggiornati/page/", "Ultimi Film Aggiornati"),
+        //Pair("$mainUrl/watch-genre/film-aggiornati/page/", "Ultimi Film Aggiornati"),
     )
 
     private val interceptor = CloudflareKiller()
@@ -34,46 +38,43 @@ class TantifilmProvider : MainAPI() {
         val soup = app.get(url, interceptor = interceptor).document
         val home = soup.select("div.media3").map {
             val title = it.selectFirst("p")!!.text().substringBefore("(")
-            val link = it.selectFirst("a")!!.attr("href")
-            val posterUrl = it.selectFirst("img")!!.attr("src")
-            TvSeriesSearchResponse(
+            val link = fixUrl(it.selectFirst("a")!!.attr("href"))
+            val posterUrl = fixUrl(it.selectFirst("img")!!.attr("src"))
+            newTvSeriesSearchResponse(
                 title,
                 link,
-                this.name,
                 TvType.Movie,
-                posterUrl,
-                null,
-                null,
-                posterHeaders = interceptor.getCookieHeaders(url).toMap()
-            )
+            ){
+                this.posterUrl = posterUrl
+                this.posterHeaders = interceptor.getCookieHeaders(url).toMap()
+            }
         }
         return newHomePageResponse(request.name, home)
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
         val queryformatted = query.replace(" ", "+")
-        val url = "$mainUrl/?s=$queryformatted"
+        val url = "$mainUrl/?story=$queryformatted&do=search&subaction=search"
 
         val doc = app.get(url, interceptor = interceptor).document
         return doc.select("div.film.film-2").map {
             val href = it.selectFirst("a")!!.attr("href")
-            val poster = it.selectFirst("img")!!.attr("src")
+            val poster = fixUrl(it.selectFirst("img")!!.attr("src").replace("/224x320-0-85/", "/203x293-0-70/")) //203x293-0-70
             val name = it.selectFirst("a > p")!!.text().substringBeforeLast("(")
-            MovieSearchResponse(
+            newMovieSearchResponse(
                 name,
                 href,
-                this.name,
-                TvType.Movie,
-                poster,
-                null,
-                posterHeaders = interceptor.getCookieHeaders(url).toMap()
-            )
+                TvType.Movie
+            ){
+                this.posterUrl = poster
+                this.posterHeaders = interceptor.getCookieHeaders(url).toMap()
+            }
 
         }
     }
 
     override suspend fun load(url: String): LoadResponse {
-
+        
         val document = app.get(url, interceptor = interceptor).document
         val type = if (document.selectFirst("div.category-film")!!.text().contains("Serie")
                 .not()
@@ -81,9 +82,9 @@ class TantifilmProvider : MainAPI() {
         val title = document.selectFirst("div.title-film-left")!!.text().substringBefore("(")
         val descipt = document.select("div.content-left-film > p").map { it.text() }
         val rating =
-            document.selectFirst("div.star-rating.star-rating-f > span > span")!!
-                .attr("data-rateit-value").toFloatOrNull()
-                ?.times(2857)?.toInt()?.let { minOf(it, 10000) }
+            document.selectFirst(".current-rating")!!
+                .text().toFloatOrNull()
+                ?.times(2000)?.toInt()?.let { minOf(it, 10000) }
 
         var year = document.selectFirst("div.title-film-left")!!.text().substringAfter("(")
             .filter { it.isDigit() }
@@ -111,39 +112,38 @@ class TantifilmProvider : MainAPI() {
 
         }
 
-        val trailerurl = document.selectFirst("#trailer_mob > iframe")!!.attr("src")
+        val trailerurl = document.selectFirst(".trailer > iframe")?.attr("src")
 
         if (type == TvType.TvSeries) {
-            val list = ArrayList<Pair<Int, String>>()
-            val urlvideocontainer = document.selectFirst("iframe")!!.attr("src")
-            val videocontainer = app.get(urlvideocontainer).document
-            videocontainer.select("nav.nav1 > select > option").forEach { element ->
-                val season = element.text().toIntOrNull()
-                val href = element.attr("value")
-                if (season != null && season > 0 && !href.isNullOrBlank()) {
-                    list.add(Pair(season, fixUrl(href)))
-                }
-            }
-            if (list.isEmpty()) throw ErrorLoadingException("No Seasons Found")
+
+
+
+
+            //val list = ArrayList<Pair<Int, String>>()
+            //val urlvideocontainer = document.selectFirst("iframe")!!.attr("src")
+            //val videocontainer = app.get(urlvideocontainer).document
 
             val episodeList = ArrayList<Episode>()
 
-            for ((season, seasonurl) in list) {
-                val seasonDocument = app.get(seasonurl).document
-                val episodes = seasonDocument.select("nav.second_nav > select > option")
-                if (episodes.isNotEmpty()) {
-                    episodes.forEach { episode ->
-                        val href = episode.attr("value")
-                        val epNum = episode.text().toIntOrNull()
-                        episodeList.add(
-                            Episode(
-                                href,
-                                title,
-                                season,
-                                epNum,
-                            )
+
+            document.select(".tt_series .tab-pane").forEach { seasonTab ->
+                val season = seasonTab.attr("id").substringAfter("-").toInt()
+                seasonTab.select("li").forEach { episode -> 
+                    val _episode = episode.selectFirst("a")
+                    val hrefs = episode.select(".mirrors").select("a").map { it.attr("data-link") }
+                    val epNum = _episode?.text()?.toIntOrNull()
+                    val data = LoadLinkData(
+                        links = hrefs,
+                        type = TvType.TvSeries
+                    ).toJson()
+                    episodeList.add(
+                        Episode(
+                            name = "Episodio $epNum",
+                            data = data,
+                            season = season,
+                            episode = epNum,
                         )
-                    }
+                    )
                 }
             }
             return newTvSeriesLoadResponse(
@@ -161,34 +161,11 @@ class TantifilmProvider : MainAPI() {
                 this.posterHeaders = interceptor.getCookieHeaders(url).toMap()
             }
         } else {
-            val url2 = document.selectFirst("iframe")!!.attr("src")
-            val actorpagelink =
-                document.select("div.content-left-film > p:nth-child(2) > a").attr("href")
-            val actorpagelink2 = document.select("div.content-left-film > p > a").attr("href")
-            val Linkactor: String = actorpagelink.ifEmpty {
-                actorpagelink2
-            }
-
-            val actors: List<ActorData>? = if (Linkactor.isNotEmpty()) {
-                val actorpage = app.get(Linkactor + "cast/").document
-                actorpage.select("article.membro-cast").filter { it ->
-                    it.selectFirst("img")
-                        ?.attr("src") != "https://www.filmtv.it/imgbank/DUMMY/no_portrait.jpg"
-                }.mapNotNull {
-                    val name = it.selectFirst("div.info > h3")!!.text()
-                    val image = it.selectFirst("img")?.attr("src")
-                    val roleString: String = if (it.selectFirst("h2")?.text() == "Regia") {
-                        "Regia"
-                    } else {
-                        "Attore"
-                    }
-                    val mainActor = Actor(name, image)
-                    ActorData(actor = mainActor, roleString = roleString)
-                }
-            } else {
-                null
-            }
-
+            val url2 = document.selectFirst("iframe:not([id=vid])")!!.attr("src")
+            val data = LoadLinkData(
+                links = listOf(url2),
+                type = TvType.Movie
+            ).toJson()
 
             val duratio: Int? = if (descipt.size == 2) {
                 descipt[0].filter { it.isDigit() }.toInt()
@@ -207,9 +184,9 @@ class TantifilmProvider : MainAPI() {
             }
             return newMovieLoadResponse(
                 title,
-                url2,
+                data,
                 type,
-                url2
+                data
             ) {
                 posterUrl = fixUrlNull(poster)
                 this.year = year.toIntOrNull()
@@ -218,13 +195,16 @@ class TantifilmProvider : MainAPI() {
                 this.recommendations = recomm
                 this.tags = tags
                 this.duration = duratio
-                this.actors = actors
                 this.posterHeaders = interceptor.getCookieHeaders(url).toMap()
                 addTrailer(trailerurl)
 
             }
         }
     }
+    
+    private data class LoadLinkData(
+        val type: TvType = TvType.Movie, val links: List<String>? = null
+    )
 
     override suspend fun loadLinks(
         data: String,
@@ -232,13 +212,33 @@ class TantifilmProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val doc = app.get(data).document
-        val iframe =
-            doc.select("option").map { it.attr("value") }.filter { it.contains("label") }
-        iframe.forEach { id ->
-            val doc2 = app.get(id).document
-            val id2 = app.get(doc2.selectFirst("iframe")!!.attr("src")).url
-            loadExtractor(id2, data, subtitleCallback, callback)
+
+        var links = ArrayList<String>()
+        
+        Log.d("Tantifilm123", "Tantifilm123: $data")
+        val dataJson = parseJson<LoadLinkData>(data) // Qui ci sono tutti i link mirrors
+        
+
+        if (dataJson.type == TvType.TvSeries) {
+            links.addAll(dataJson.links!!)
+        } else {
+            val _url = dataJson.links?.joinToString("") ?: ""
+            val doc = app.get(_url).document
+            doc.select("._player-mirrors li").forEach{
+                links.add(
+                    fixUrl(it.attr("data-link"))
+                )
+            }
+            Log.d("Tantifilm123", "Tantifilm123: $data")
+            Log.d("Tantifilm123", "Tantifilm123: $links")
+        }
+        //val doc2 = app.get(iframe).document
+        //val id2 = app.get(doc2.selectFirst("iframe")!!.attr("src")).url
+        //loadExtractor(fixUrl(iframe), data, subtitleCallback, callback)
+        links.forEach { link ->
+            //val doc2 = app.get(link).document
+            //val id2 = app.get(doc2.selectFirst("iframe")!!.attr("src")).url
+            loadExtractor(link, data, subtitleCallback, callback)
         }
         return true
     }
