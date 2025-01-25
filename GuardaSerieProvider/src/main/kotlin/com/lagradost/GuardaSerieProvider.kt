@@ -10,7 +10,7 @@ import com.lagradost.cloudstream3.CommonActivity.showToast
 
 class GuardaSerieProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://guardaserie.my"
+    override var mainUrl = "https://guardaserietv.online/"
     override var name = "GuardaSerie"
     override val hasMainPage = true
     override val hasChromecastSupport = true
@@ -50,17 +50,11 @@ class GuardaSerieProvider : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val doc = app.post(
-            mainUrl, data = mapOf(
-                "do" to "search",
-                "subaction" to "search",
-                "story" to query
-            )
-        ).document
+        val doc = app.get("$mainUrl/?story=$query&do=search&subaction=search").document
         return doc.select("div.mlnew").drop(1).map { series ->
             val title = series.selectFirst("div.mlnh-2")!!.text()
             val link = series.selectFirst("div.mlnh-2 > h2 > a")!!.attr("href")
-            val posterUrl = fixUrl(series.selectFirst("img")!!.attr("src")).replace("/60x85-0-85/", "/141x200-0-85/")
+            val posterUrl = fixUrl(series.selectFirst("img")!!.attr("src")).replace("/thumb/60x85-0-85/", "/posts/")
             newMovieSearchResponse(
                 title,
                 link,
