@@ -112,7 +112,10 @@ data class Episode(
 data class AnimeInfo(
     @JsonProperty("id") val id: Int,
     @JsonProperty("name") val name: String?,
-    @JsonProperty("slug") val slug: String,
+    /*
+        "slug" deprecated because is not present anymore in the api json
+     */
+    //@JsonProperty("slug") val slug: String,
     @JsonProperty("episodes_count") val episodesCount: Int,
     @JsonProperty("current_episode") val currentEpisode: Int,
     @JsonProperty("episodes") val episodes: List<Episode>
