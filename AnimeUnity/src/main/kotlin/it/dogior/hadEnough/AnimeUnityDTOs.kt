@@ -89,7 +89,7 @@ data class Anime(
     @JsonProperty("always_home") val alwaysHome: Int,
     @JsonProperty("cover") val cover: String?,
     @JsonProperty("anilist_id") val anilistId: Int,
-    @JsonProperty("season") val season: String,
+    @JsonProperty("season") val season: String?,
     @JsonProperty("title_it") val titleIt: String?,
     @JsonProperty("mal_id") val malId: Int,
     @JsonProperty("episodes") val episodes: List<Episode>?,
