@@ -1,4 +1,4 @@
-package com.lagradost
+package it.dogior.hadEnough
 
 import android.util.Base64
 import com.lagradost.api.Log
@@ -94,7 +94,7 @@ class VidguardExtractor : ExtractorApi() {
                     } else {
                         Context.toString(svgObject)
                     }
-                } catch (e: Exception) {
+                } catch (e: Error) {
                     Log.i("Error", e.toString())
                 } finally {
                     Context.exit()
@@ -105,8 +105,8 @@ class VidguardExtractor : ExtractorApi() {
             ThreadGroup("A"),
             r,
             "thread_rhino",
-            2000000
-        ) // StackSize 2Mb: Run in a thread because rhino requires more stack size for large scripts.
+            3000000
+        ) // StackSize 3Mb: Run in a thread because rhino requires more stack size for large scripts.
         t.start()
         t.join()
         t.interrupt()

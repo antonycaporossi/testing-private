@@ -1,4 +1,4 @@
-package com.lagradost
+package it.dogior.hadEnough
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

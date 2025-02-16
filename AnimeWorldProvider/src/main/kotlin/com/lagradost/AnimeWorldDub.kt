@@ -1,13 +1,13 @@
-package com.lagradost
+package it.dogior.hadEnough
 
 import com.lagradost.cloudstream3.*
 
-class AnimeWorldDub : AnimeWorldCore() {
+class AnimeWorldDub(isSplit: Boolean) : AnimeWorldCore(isSplit) {
     override var name = "AnimeWorld Dub"
     override var lang = "it"
-    override val isDubbed = true
+    override val currentExtension = CurrentExtension.DUB
 
-    override val mainPage = mainPageOf(
+    override val mainPage = super.mainPage + mainPageOf(
         "$mainUrl/filter?status=0&language=it&sort=1" to "In Corso",
         "$mainUrl/filter?language=it&sort=1" to "Ultimi aggiunti",
         "$mainUrl/filter?language=it&sort=6" to "Più Visti",

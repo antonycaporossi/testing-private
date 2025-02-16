@@ -6,8 +6,10 @@ cloudstream {
     language = "it"
     // All of these properties are optional, you can safely remove them
 
-    // description = "Lorem Ipsum"
-    // authors = listOf("Cloudburst")
+    authors = listOf("Gian-Fr", "doGior")
+    requiresResources = true
+    description =
+        "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo"
 
     /**
      * Status int as the following:
@@ -23,5 +25,17 @@ cloudstream {
         "OVA",
     )
 
-    iconUrl = "https://www.google.com/s2/favicons?domain=www.animeworld.tv&sz=%size%"
+    iconUrl = "https://static.animeworld.so/assets/images/favicon/android-icon-192x192.png?s"
+}
+
+android {
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("org.mozilla:rhino:1.7.15")
 }
