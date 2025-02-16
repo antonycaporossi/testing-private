@@ -1,4 +1,4 @@
-package it.dogior.hadEnough
+package it.testingprivate
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.AnimeSearchResponse

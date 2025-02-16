@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_tw">Impostazioni AnimeWorld</string>
+    <string name="unique_switch_text">Divisione plugin</string>
+    <string name="sub_switch_text">AnimeWorld Sub</string>
+    <string name="dub_switch_text">AnimeWorld Dub</string>
+</resources>

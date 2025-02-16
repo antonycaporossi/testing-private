@@ -1,4 +1,4 @@
-package it.dogior.hadEnough
+package it.testingprivate
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

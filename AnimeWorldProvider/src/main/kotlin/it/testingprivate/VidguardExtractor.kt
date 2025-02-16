@@ -1,4 +1,4 @@
-package it.dogior.hadEnough
+package it.testingprivate
 
 import android.util.Base64
 import com.lagradost.api.Log

@@ -1,4 +1,4 @@
-package it.dogior.hadEnough
+package it.testingprivate
 
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
@@ -26,10 +26,10 @@ class AnimeWorldPlugin : Plugin() {
             registerMainAPI(AnimeWorldCore(isSplit))
         }
 
-        /*val activity = context as AppCompatActivity
+        val activity = context as AppCompatActivity
         openSettings = {
             val frag = Settings(this)
             frag.show(activity.supportFragmentManager, "Frag")
-        }*/
+        }
     }
 }
