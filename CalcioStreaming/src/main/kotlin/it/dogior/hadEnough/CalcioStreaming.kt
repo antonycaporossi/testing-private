@@ -1,18 +1,22 @@
-package com.lagradost
+package it.dogior.hadEnough
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.Interceptor
+import okhttp3.Response
 import org.jsoup.nodes.Document
 
 class CalcioStreaming : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://calciostreaming.wiki"
+    override var mainUrl = "https://calciostreaming.tattoo"
     override var name = "CalcioStreaming"
     override val hasMainPage = true
     override val hasChromecastSupport = true
     override val supportedTypes = setOf(TvType.Live)
+    val cfKiller = CloudflareKiller()
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val document = app.get("$mainUrl/partite-streaming.html").document
@@ -70,14 +74,6 @@ class CalcioStreaming : MainAPI() {
         return url
     }
 
-    private fun getUrl(document: Document):String{
-        val unpackedDocument = getAndUnpack(
-            document.toString()
-        )
-        return Regex(""""((.|\n)*?).";""").find(
-           unpackedDocument)!!.value.replace("""src="""", "").replace(""""""", "").replace(";", "")
-    }
-
     private suspend fun extractVideoLinks(
         url: String,
         callback: (ExtractorLink) -> Unit
@@ -120,7 +116,15 @@ class CalcioStreaming : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         extractVideoLinks(data, callback)
-
         return true
+    }
+
+    override fun getVideoInterceptor(extractorLink: ExtractorLink): Interceptor {
+        return object :Interceptor{
+            override fun intercept(chain: Interceptor.Chain): Response {
+                val response = cfKiller.intercept(chain)
+                return response
+            }
+        }
     }
 }
