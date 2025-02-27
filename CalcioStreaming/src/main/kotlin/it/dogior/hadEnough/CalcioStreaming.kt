@@ -1,4 +1,4 @@
-package it.dogior.hadEnough
+package com.lagradost
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.*
