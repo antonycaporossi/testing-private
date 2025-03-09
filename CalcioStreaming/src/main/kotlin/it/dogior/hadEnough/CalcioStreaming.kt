@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
 
 class CalcioStreaming : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://calciostreaming.tattoo"
+    override var mainUrl = "https://guardacalcio.space"
     override var name = "CalcioStreaming"
     override val hasMainPage = true
     override val hasChromecastSupport = true

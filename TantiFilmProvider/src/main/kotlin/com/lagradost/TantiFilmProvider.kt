@@ -13,7 +13,7 @@ import android.util.Log
 
 class TantifilmProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://tantifilm.name"
+    override var mainUrl = "https://tantifilm.diy"
     override var name = "Tantifilm"
     override val hasMainPage = true
     override val hasChromecastSupport = true
