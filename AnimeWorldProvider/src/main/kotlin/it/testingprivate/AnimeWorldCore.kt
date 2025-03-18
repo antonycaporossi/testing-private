@@ -67,7 +67,7 @@ open class AnimeWorldCore(isSplit: Boolean = false) : MainAPI() {
     )
 
     companion object {
-        private var mainUrl = "https://www.animeworld.so"
+        private var mainUrl = "https://www.animeworld.ac"
         private var cookies = mutableMapOf<String, String>()
         private var headers = mutableMapOf<String, String>()
 
