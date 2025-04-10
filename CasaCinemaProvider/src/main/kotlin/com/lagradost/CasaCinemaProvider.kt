@@ -15,7 +15,7 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import org.jsoup.nodes.Element
 
 class CasaCinemaProvider : MainAPI() { // all providers must be an instance of MainAPI
-    override var mainUrl = "https://casacinema.help/"
+    override var mainUrl = "https://casacinema.living/"
     override var name = "CasaCinema"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
