@@ -33,6 +33,7 @@ import com.lagradost.cloudstream3.newHomePageResponse
 import com.lagradost.cloudstream3.newMovieLoadResponse
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.newExtractorLink
 import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.cloudstream3.utils.loadExtractor
 import com.lagradost.nicehttp.NiceResponse
@@ -398,13 +399,14 @@ open class AnimeWorldCore(isSplit: Boolean = false) : MainAPI() {
         apiResults.amap {
             if (it.target.contains("AnimeWorld")) {
                 callback.invoke(
-                    ExtractorLink(
+                    newExtractorLink(
                         name,
                         "AnimeWorld",
-                        it.grabber,
-                        referer = mainUrl,
-                        quality = Qualities.Unknown.value
-                    )
+                        it.grabber
+                    ){
+                        this.referer = mainUrl
+                        this.quality = Qualities.Unknown.value
+                    }
                 )
 
             } else if (it.target.contains("listeamed.net")) {

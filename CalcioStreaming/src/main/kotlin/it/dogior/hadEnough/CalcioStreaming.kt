@@ -94,14 +94,14 @@ class CalcioStreaming : MainAPI() {
                 if (newPage.select("script").size >= 6 && streamUrl != null){
                     videoNotFound = false
                     callback(
-                        ExtractorLink(
-                            this.name,
-                            button.text(),
-                            streamUrl,
-                            fixUrl(link),
-                            quality = 0,
-                            true
-                        )
+                        newExtractorLink(
+                            source = this.name,
+                            name = button.text(),
+                            url = streamUrl
+                        ) {
+                            this.quality = 0
+                            this.referer = fixUrl(link)
+                        }
                     )
                 }
             }

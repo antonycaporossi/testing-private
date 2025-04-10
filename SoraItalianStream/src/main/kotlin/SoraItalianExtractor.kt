@@ -270,13 +270,14 @@ object SoraItalianExtractor : SoraItalianStream() {
                         }
 
                         callback.invoke(
-                            ExtractorLink(
+                            newExtractorLink(
                                 "AnimeWorld",
                                 nameData,
-                                url ?: "",
-                                referer = animeworldUrl,
-                                quality = Qualities.Unknown.value
-                            )
+                                url ?: ""
+                            ){
+                                this.referer = animeworldUrl
+                                this.quality = Qualities.Unknown.value
+                            }
                         )
                     }
             }
@@ -303,14 +304,15 @@ object SoraItalianExtractor : SoraItalianStream() {
                     "$aniplayUrl/api/episode/${response.episodes.find { it.number.toInt() == episode }?.id}"
                 val streamUrl = parseJson<AniPlayApiEpisodeUrl>(app.get(episodeUrl).text).url
                 callback.invoke(
-                    ExtractorLink(
+                    newExtractorLink(
                         name,
                         AnimeName,
                         streamUrl,
-                        referer = mainUrl,
-                        quality = Qualities.Unknown.value,
-                        isM3u8 = streamUrl.contains(".m3u8"),
-                    )
+                        type = if (streamUrl.contains(".m3u8")) ExtractorLinkType.M3U8 else INFER_TYPE
+                    ){
+                        this.quality = Qualities.Unknown.value
+                        this.referer = mainUrl
+                    }
                 )
             } else {
                 val seasonid = response.seasons.sortedBy { it.episodeStart }
@@ -325,14 +327,15 @@ object SoraItalianExtractor : SoraItalianStream() {
                     val streamUrl =
                         parseJson<AniPlayApiEpisodeUrl>(app.get("$aniplayUrl/api/episode/${episodeData}").text).url
                     callback.invoke(
-                        ExtractorLink(
+                        newExtractorLink(
                             name,
                             AnimeName,
                             streamUrl,
-                            referer = mainUrl,
-                            quality = Qualities.Unknown.value,
-                            isM3u8 = streamUrl.contains(".m3u8"),
-                        )
+                            type = if (streamUrl.contains(".m3u8")) ExtractorLinkType.M3U8 else INFER_TYPE
+                        ){
+                            this.referer = mainUrl
+                            this.quality = Qualities.Unknown.value
+                        }
                     )
                 }
             }
@@ -380,14 +383,16 @@ object SoraItalianExtractor : SoraItalianStream() {
                                 }.toString()
                             )?.value
                         callback.invoke(
-                            ExtractorLink(
+                            newExtractorLink(
                                 name,
                                 AnimeName,
                                 episodeUrl!!,
-                                isM3u8 = episodeUrl.contains(".m3u8"),
-                                referer = "https://www.animesaturn.io/", //Some servers need the old host as referer, and the new ones accept it too
-                                quality = Qualities.Unknown.value
-                            )
+                                type = episodeUrl.contains(".m3u8").let { if (it) ExtractorLinkType.M3U8 else INFER_TYPE },
+                                
+                            ) {
+                                this.referer = animesaturnUrl
+                                this.quality = Qualities.Unknown.value
+                            }
                         )
                     }
 

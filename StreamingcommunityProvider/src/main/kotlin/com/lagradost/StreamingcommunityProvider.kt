@@ -320,14 +320,15 @@ class StreamingcommunityProvider : MainAPI() {
         val realUrl = "$urld$separator" +
             "token=$token&expires=$expires$asnPart$h"
         callback.invoke(
-            ExtractorLink(
+            newExtractorLink(
                 name,
                 name,
                 realUrl,
-                isM3u8 = true,
-                referer = mainUrl,
-                quality = Qualities.Unknown.value
-            )
+                ExtractorLinkType.M3U8
+            ){
+                this.referer = mainUrl
+                this.quality = Qualities.Unknown.value
+            }
         )
         return true
     }

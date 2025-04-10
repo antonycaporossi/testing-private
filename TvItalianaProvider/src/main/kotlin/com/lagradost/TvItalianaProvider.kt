@@ -7,6 +7,8 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.newExtractorLink
 import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.nicehttp.RequestBodyTypes
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -158,14 +160,15 @@ class TvItalianaProvider : MainAPI() {
 
         if (!loadData.discoveryBoolean) {
             callback.invoke(
-                ExtractorLink(
-                    this.name,
-                    loadData.title,
-                    loadData.url,
-                    "",
-                    Qualities.Unknown.value,
-                    isM3u8 = true
-                )
+                newExtractorLink(
+                    source = this.name,
+                    name = loadData.title,
+                    url = loadData.url,
+                    ExtractorLinkType.M3U8
+                ) {
+                    this.quality = Qualities.Unknown.value
+                    this.referer = ""
+                }
             )
         }
         else{
@@ -177,14 +180,15 @@ class TvItalianaProvider : MainAPI() {
             val data = app.post("$domain/playback/v3/channelPlaybackInfo", requestBody = post.toRequestBody(
                 RequestBodyTypes.JSON.toMediaTypeOrNull()), cookies = cookies).text.substringAfter("\"url\" : \"").substringBefore("\"")
             callback.invoke(
-                ExtractorLink(
+                newExtractorLink(
                     this.name,
                     loadData.title,
                     data,
-                    "",
-                    Qualities.Unknown.value,
-                    isM3u8 = true
-                )
+                    ExtractorLinkType.M3U8
+                ) {
+                    this.referer = ""
+                    this.quality = Qualities.Unknown.value
+                }
             )
         }
         return true

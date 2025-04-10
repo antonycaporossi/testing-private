@@ -9,6 +9,9 @@ import com.lagradost.cloudstream3.LoadResponse.Companion.addRating
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.INFER_TYPE
+import com.lagradost.cloudstream3.utils.newExtractorLink
 import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.nodes.Element
 import com.lagradost.api.Log
@@ -274,14 +277,15 @@ class AnimeSaturnProvider : MainAPI() {
         }
 
         callback.invoke(
-            ExtractorLink(
+            newExtractorLink(
                 name,
                 name,
                 episodeUrl!!,
-                isM3u8 = isM3U8,
-                referer = data, //Some servers need the old host as referer, and the new ones accept it too
-                quality = Qualities.Unknown.value
-            )
+                if (isM3U8) ExtractorLinkType.M3U8 else INFER_TYPE
+            ){
+                this.referer = data //Some servers need the old host as referer, and the new ones accept it too
+                this.quality = Qualities.Unknown.value
+            }
         )
         return true
     }
