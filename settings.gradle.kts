@@ -10,6 +10,7 @@ include(
     "AnimeUnity",
     "AnimeWorldProvider",
     "CalcioStreaming",
+    "CalcioStreamingLat",
     "CasaCinemaProvider",
     "CineBlog01Provider",
     "EurostreamingProvider",
