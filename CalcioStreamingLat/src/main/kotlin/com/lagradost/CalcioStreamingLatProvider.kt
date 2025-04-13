@@ -23,7 +23,7 @@ class CalcioStreamingLatProvider : MainAPI() {
 
         return HomePageResponse(sections.map {it ->
             val sectionName = it.select("h4 b")!!.text()
-            val shows = it.select("tr.m3u8").map {
+            val shows = it.select("tr.m3u8, tr.embed").map {
                 val href = it.select("a")!!.attr("href")
                 val name = it.select("a")!!.text()
                 val posterUrl = fixUrl("https://i.imgur.com/YTz3Wp7.jpeg")
@@ -69,6 +69,51 @@ class CalcioStreamingLatProvider : MainAPI() {
         val doc = response.document
         val html = doc.toString()
         val finalUrl = response.url
+        val iframe = doc.selectFirst("iframe")?.attr("src")
+        if (iframe != null) {
+                /*
+                    Da migliorare.
+                    Attuale funzionamento
+                    L'iframe richiama l'URL che funziona solo con referer.
+                    La nuova pagina riceve il channel key che non è altro che "calcio" + id
+                    Fa una fetch:
+                        fetch('/server_lookup.php?channel_id=' + channelKey)
+                    
+                    Il response è questo
+                        {
+                            "server_key": "calcio"
+                        }
+                    
+                    Estratta la key si può fare il build dell'URL:
+                        var m3u8Url = (serverKey === "top1/cdn") ?
+                        "https://top1.newkso.ru/top1/cdn/" + channelKey + "/mono.m3u8" :
+                        "https://" + serverKey + "new.newkso.ru/" + serverKey + "/" + channelKey + "/mono.m3u8";
+                 */
+                val channelKey = iframe.substringAfter("id=")
+                val m3u8Url = "https://calcionew.newkso.ru/calcio/calcio${channelKey}/mono.m3u8"
+            callback(
+                //val headers = mapOf("Referer" to finalUrl)
+                //val iframeResponse = app.get(iframeUrl, headers = headers).document
+                //val html = iframeResponse.toString()
+                //html.substringAfter("channelKey = \"").substringBefore(";")
+                //val serverKeyUrl = html.substringAfter("fetch('").substringBefore("'")
+
+                /*val iframeHeaders = mapOf(
+                    "Referer" to iframeUrl,
+                )
+                val serverResponse = app.get(serverKeyUrl, headers = iframeHeaders).document*/
+
+                newExtractorLink(
+                    source = this.name,
+                    name = "Iframe",
+                    url = m3u8Url,
+                    type = ExtractorLinkType.M3U8
+                ) {
+                    this.referer = finalUrl
+                }
+            )
+            return true
+        }
         val m3u8Regex = Regex("""https?:\/\/[^\s"'\\]+\.m3u8""")
 
         val headers = mapOf("Referer" to finalUrl)
