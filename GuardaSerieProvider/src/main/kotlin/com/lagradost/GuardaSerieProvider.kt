@@ -10,7 +10,7 @@ import com.lagradost.cloudstream3.CommonActivity.showToast
 
 class GuardaSerieProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://guardaserietv.live/"
+    override var mainUrl = "https://guardaserietv.top/"
     override var name = "GuardaSerie"
     override val hasMainPage = true
     override val hasChromecastSupport = true
