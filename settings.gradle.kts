@@ -17,6 +17,7 @@ include(
     "FilmpertuttiProvider",
     "GuardaSerieProvider",
     "IlGenioDelloStreamingProvider",
+    "OnlineSerieTV",
     "SoraItalianStream",
     "StreamingcommunityProvider",
     "TantiFilmProvider",
