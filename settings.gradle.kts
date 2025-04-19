@@ -22,5 +22,6 @@ include(
     "StreamingcommunityProvider",
     "TantiFilmProvider",
     "ToonItalia",
+    "ToonItaliaXYZ",
     "TvItalianaProvider"
 )
