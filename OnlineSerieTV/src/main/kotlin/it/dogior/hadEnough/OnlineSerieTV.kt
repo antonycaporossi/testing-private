@@ -39,6 +39,10 @@ class OnlineSerieTV : MainAPI() {
     override var lang = "it"
     override val hasMainPage = true
     private val interceptor = CloudflareKiller()
+    private val headers = mapOf(
+        "User-Agent" to "Mozilla/5.0 (Linux; Android 11; RMX2170 Build/RKQ1.200903.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/135.0.7049.100 Mobile Safari/537.36",
+        //"User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+    )
 
     override val mainPage = mainPageOf(
 //        mainUrl to "Top 10 Film",
@@ -83,7 +87,7 @@ class OnlineSerieTV : MainAPI() {
         )
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
         val response = try {
-            app.get(request.data, interceptor = interceptor).document
+            app.get(request.data, interceptor = interceptor, headers = headers).document
         } catch (e: SocketTimeoutException) {
             return null
         }
@@ -165,7 +169,7 @@ class OnlineSerieTV : MainAPI() {
 
     // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
-        val response = app.get("$mainUrl/?s=$query", interceptor = interceptor)
+        val response = app.get("$mainUrl/?s=$query", interceptor = interceptor, headers = headers)
         val page = response.document
         val itemGrid = page.selectFirst("#box_movies")!!
         val items = itemGrid.select(".movie")
@@ -176,7 +180,7 @@ class OnlineSerieTV : MainAPI() {
     }
 
     override suspend fun load(url: String): LoadResponse {
-        val response = app.get(url, interceptor = interceptor).document
+        val response = app.get(url, interceptor = interceptor, headers = headers).document
         val dati = response.selectFirst(".headingder")!!
         val poster = dati.select(".imgs > img").attr("src").replace(Regex("""-\d+x\d+"""), "")
         val title = dati.select(".dataplus > div:nth-child(1) > h1").text().trim()
