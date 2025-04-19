@@ -41,7 +41,6 @@ class ToonItalia :
     override val mainPage = mainPageOf(
         mainUrl to "Ultimi Aggiunti",
         "${mainUrl}category/kids/" to "Serie Tv",
-        "${mainUrl}category/anime/" to "Anime",
         "${mainUrl}film-anime/" to "Film",
     )
 
@@ -51,7 +50,7 @@ class ToonItalia :
         } else {
             request.data + "page/$page"
         }
-        val response = app.get(url)
+        val response = app.get(url, interceptor = interceptor)
         val document = response.document
 
         val mainSection = document.select("#main").first()?.children()
@@ -94,7 +93,7 @@ class ToonItalia :
     }
 
     override suspend fun load(url: String): LoadResponse {
-        val response = app.get(url).document
+        val response = app.get(url, interceptor = interceptor).document
         var title = response.select(".entry-title").text().trim()
         var year: Int? = null
         if (title.takeLast(4).all { it.isDigit() }) {
@@ -147,7 +146,7 @@ class ToonItalia :
     }
 
     private suspend fun getEpisodes(url: String): List<Episode> {
-        val response = app.get(url)
+        val response = app.get(url, interceptor = interceptor)
         val table = response.document.select(".table_link > thead:nth-child(2)")
         var season: Int? = 1
         val rows = table.select("tr")
