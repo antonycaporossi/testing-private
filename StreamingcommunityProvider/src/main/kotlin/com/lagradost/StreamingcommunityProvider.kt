@@ -20,8 +20,8 @@ import org.json.JSONObject
 import com.lagradost.cloudstream3.network.CloudflareKiller
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingcommunity.football"
-    private var cdnUrl = "https://cdn.streamingcommunity.football" // Images
+    override var mainUrl = "https://streamingcommunity.spa"
+    private var cdnUrl = "https://cdn.streamingcommunity.spa" // Images
     private var xInertiaVersion = "759de90f13813ff6f03369b34b51a141"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
