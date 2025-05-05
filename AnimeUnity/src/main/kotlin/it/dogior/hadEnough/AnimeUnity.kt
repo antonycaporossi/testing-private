@@ -294,16 +294,15 @@ class AnimeUnity : MainAPI() {
         val title = anime.titleIt ?: anime.titleEng ?: anime.title!!
         val relatedAnimes = relatedAnime.amap {
             val relatedTitle = (it.titleIt ?: it.titleEng ?: it.title!!)
-            AnimeSearchResponse(
+            val poster = getImage(it.imageUrl, it.anilistId)
+            newAnimeSearchResponse(
                 name = relatedTitle.replace(" (ITA)", ""),
                 url = "$mainUrl/anime/${it.id}-${it.slug}",
-                apiName = this@AnimeUnity.name,
-                posterUrl = getImage(it.imageUrl, it.anilistId),
                 type = if (it.type == "TV") TvType.Anime
                 else if (it.type == "Movie" || it.episodesCount == 1) TvType.AnimeMovie
-                else TvType.OVA
-            ).apply {
+                else TvType.OVA){
                 addDubStatus(it.dub == 1 || relatedTitle.contains("(ITA)"))
+                addPoster(poster)
             }
         }
 
