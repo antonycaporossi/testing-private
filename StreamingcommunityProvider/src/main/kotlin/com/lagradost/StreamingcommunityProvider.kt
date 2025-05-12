@@ -18,10 +18,11 @@ import com.lagradost.cloudstream3.CommonActivity.showToast
 import java.net.URLDecoder
 import org.json.JSONObject
 import com.lagradost.cloudstream3.network.CloudflareKiller
+import android.util.Log
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingcommunity.ovh"
-    private var cdnUrl = "https://cdn.streamingcommunity.ovh" // Images
+    override var mainUrl = "https://streamingunity.to"
+    private var cdnUrl = "https://cdn.streamingunity.to" // Images
     private var xInertiaVersion = "759de90f13813ff6f03369b34b51a141"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
@@ -158,7 +159,7 @@ class StreamingcommunityProvider : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val url = "$mainUrl/search"
+        val url = "$mainUrl/it/search"
         val parsedJson = getDecodedJson(url)
         val xInertiaVersion_2 = parsedJson.version
         val soup = app.get(
@@ -196,11 +197,9 @@ class StreamingcommunityProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val linkData = parseJson<LinkData>(url)
-        val realUrl = "${this.mainUrl}/titles/${linkData.id}-${linkData.slug}"
-
+        val realUrl = "${this.mainUrl}/it/titles/${linkData.id}-${linkData.slug}"
 
         val parsedJson = getDecodedJson(realUrl)
-
         val xInertiaVersion_2 = parsedJson.version
 
         val type = if (parsedJson.props.title.type == "tv") TvType.TvSeries else TvType.Movie
@@ -225,12 +224,12 @@ class StreamingcommunityProvider : MainAPI() {
         val titleId = parsedJson.props.title.id.toString()
 
         if (type == TvType.TvSeries) {
-
+            
             val seasonsCountInt = parsedJson.props.title.seasonsCount!!.toInt()
-
             val episodeList = (1..seasonsCountInt).map { season ->
+                Log.d("teest", "documentSeason: $realUrl/season-$season")
                 val documentSeason = app.get(
-                    "$realUrl/stagione-$season",
+                    "$realUrl/season-$season",
                     referer = mainUrl,
                     headers = mapOf(
                         "X-Inertia" to "true",
@@ -258,6 +257,7 @@ class StreamingcommunityProvider : MainAPI() {
                 episodeId = "0",
                 scwsId = parsedJson.props.title.scwsId.toString()
             ).toJson()
+            Log.d("teest", "titleId: $titleId, episodeId: 0, scwsId: ${parsedJson.props.title.scwsId.toString()}")
             return newMovieLoadResponse(title, data, TvType.Movie, data) {
                 this.year = year?.toIntOrNull()
                 this.plot = titleId + " | " + parsedJson.props.title.scwsId.toString() + " - " + description
@@ -279,7 +279,7 @@ class StreamingcommunityProvider : MainAPI() {
     ): Boolean {
         val dataJson = parseJson<LoadLinkData>(data)
         val document = app.get(
-            "${this.mainUrl}/iframe/${dataJson.titleId}?episode_id=${dataJson.episodeId}",
+            "${this.mainUrl}/it/iframe/${dataJson.titleId}?episode_id=${dataJson.episodeId}",
             referer = mainUrl,
             headers = mapOf(
                 "User-Agent" to userAgent
