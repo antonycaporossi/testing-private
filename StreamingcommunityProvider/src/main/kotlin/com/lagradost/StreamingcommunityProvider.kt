@@ -21,8 +21,8 @@ import com.lagradost.cloudstream3.network.CloudflareKiller
 import android.util.Log
 
 class StreamingcommunityProvider : MainAPI() {
-    override var mainUrl = "https://streamingunity.to"
-    private var cdnUrl = "https://cdn.streamingunity.to" // Images
+    override var mainUrl = "https://streamingunity.blog"
+    private var cdnUrl = "https://cdn.streamingunity.blog" // Images
     private var xInertiaVersion = "759de90f13813ff6f03369b34b51a141"
     override var name = "StreamingCommunity"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
