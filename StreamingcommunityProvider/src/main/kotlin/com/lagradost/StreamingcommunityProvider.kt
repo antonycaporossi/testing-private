@@ -71,7 +71,7 @@ class StreamingcommunityProvider : MainAPI() {
             val url = "${this.mainUrl}/api/sliders/fetch"
             val postDatas = listOf(
                 
-            "{\"sliders\":[{\"name\":\"upcoming\",\"genre\":null},{\"name\":\"genre\",\"genre\":\"Famiglia\"},{\"name\":\"genre\",\"genre\":\"Kids\"}]}",
+            "{\"sliders\":[{\"name\":\"trending\",\"genre\":null},{\"name\":\"top10\",\"genre\":null},{\"name\":\"latest\",\"genre\":null},{\"name\":\"genre\",\"genre\":\"Famiglia\"},{\"name\":\"genre\",\"genre\":\"Kids\"}]}",
             "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Crime\"},{\"name\":\"genre\",\"genre\":\"Musica\"},{\"name\":\"genre\",\"genre\":\"Thriller\"},{\"name\":\"genre\",\"genre\":\"Korean drama\"},{\"name\":\"genre\",\"genre\":\"Soap\"},{\"name\":\"genre\",\"genre\":\"Guerra\"}]}",
             "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"Commedia\"},{\"name\":\"genre\",\"genre\":\"Action & Adventure\"},{\"name\":\"genre\",\"genre\":\"Avventura\"},{\"name\":\"genre\",\"genre\":\"Animazione\"},{\"name\":\"genre\",\"genre\":\"Mistero\"},{\"name\":\"genre\",\"genre\":\"Storia\"}]}",
             "{\"sliders\":[{\"name\":\"genre\",\"genre\":\"televisione film\"},{\"name\":\"genre\",\"genre\":\"Azione\"},{\"name\":\"genre\",\"genre\":\"War & Politics\"},{\"name\":\"genre\",\"genre\":\"Romance\"},{\"name\":\"genre\",\"genre\":\"Sci-Fi & Fantasy\"},{\"name\":\"genre\",\"genre\":\"Reality\"}]}",
