@@ -152,7 +152,10 @@ class ToonItaliaXYZ :
                     val episodeTitle = parts[1].trim()
                     val links = Jsoup.parse(it).select("a").map() { it.attr("href") }.toJson()
                     episodeList.add(
-                        Episode(data = links, name = episodeTitle, episode = episodeNumber?.toDoubleOrNull()?.toInt() )
+                        newEpisode(links){
+                            this.name = episodeTitle
+                            this.episode = episodeNumber?.toDoubleOrNull()?.toInt()
+                        }
                     )
                 }
             }

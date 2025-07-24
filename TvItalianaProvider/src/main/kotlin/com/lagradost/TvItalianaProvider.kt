@@ -15,6 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 import java.util.UUID
+import android.util.Log
 
 class TvItalianaProvider : MainAPI() {
     override var lang = "it"
@@ -39,14 +40,14 @@ class TvItalianaProvider : MainAPI() {
                     val channelname = channel.title.toString()
                     val posterurl = channel.attributes["tvg-logo"].toString()
                     val nation = channel.attributes["group-title"].toString()
-                    LiveSearchResponse(
+                    newLiveSearchResponse(
                         channelname,
                         LoadData(streamurl, channelname, posterurl, nation, false).toJson(),
-                        this@TvItalianaProvider.name,
                         TvType.Live,
-                        posterurl,
-                        lang = "ita"
-                    )
+                    ){
+                        this.posterUrl = posterurl
+                        this.lang = "ita"
+                    }
                 }
                 HomePageList(
                     title,
@@ -63,14 +64,14 @@ class TvItalianaProvider : MainAPI() {
                 "MTV8" -> "https://upload.wikimedia.org/wikipedia/commons/b/ba/MTV8_logo.jpg"
                 else -> "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Sky_italia_2018.png/640px-Sky_italia_2018.png"
             }
-            LiveSearchResponse(
+            newLiveSearchResponse(
                 it?.title!!,
                 LoadData(it.streamingUrl!!, it.title!!, posterUrl, "", false).toJson(),
-                this@TvItalianaProvider.name,
                 TvType.Live,
-                posterUrl,
-                lang = "ita"
-            )
+            ){
+                this.posterUrl = posterUrl
+                this.lang = "ita"
+            }
         }
         res.add(
             HomePageList(
@@ -89,14 +90,14 @@ class TvItalianaProvider : MainAPI() {
         val discoveryinfo = streamDatas?.filter { it.type == "channel" && it.attributes?.hasLiveStream == true && it.attributes.packages?.contains("Free") ?: false  }
             ?.map { streamInfo ->
                 val posterUrl = posterValues?.find { it.first == streamInfo.relationships?.images?.data?.first()?.id }?.second!!
-                LiveSearchResponse(
+                newLiveSearchResponse(
                     streamInfo.attributes?.name!!,
                     LoadData(streamInfo.id, streamInfo.attributes.name, posterUrl, streamInfo.attributes.longDescription!!, true).toJson(),
-                    this@TvItalianaProvider.name,
                     TvType.Live,
-                    posterUrl,
-                    lang = "ita"
-                )
+                ){
+                    this.posterUrl = posterUrl
+                    this.lang = "ita"   
+                }
             }
         res.add(
             HomePageList(
@@ -118,27 +119,27 @@ class TvItalianaProvider : MainAPI() {
             val channelname = channel.attributes["tvg-id"].toString()
             val posterurl = channel.attributes["tvg-logo"].toString()
             val nation = channel.attributes["group-title"].toString()
-            LiveSearchResponse(
+            newLiveSearchResponse(
                 channelname,
                 LoadData(streamurl, channelname, posterurl, nation,false).toJson(),
-                this@TvItalianaProvider.name,
                 TvType.Live,
-                posterurl,
-            )
+            ){
+                this.posterUrl = posterurl
+            }
         }
     }
 
     override suspend fun load(url: String): LoadResponse {
         val data = parseJson<LoadData>(url)
-
-        return LiveStreamLoadResponse(
+        Log.d("teest", data.url)
+        return newLiveStreamLoadResponse(
             data.title,
             data.url,
-            this.name,
-            url,
-            data.poster,
-            plot = data.plot
-        )
+            url
+        ){
+            this.plot = data.plot
+            this.posterUrl = data.poster
+        }
     }
     data class LoadData(
         val url: String,
@@ -157,7 +158,6 @@ class TvItalianaProvider : MainAPI() {
 
 
         val loadData = parseJson<LoadData>(data)
-
         if (!loadData.discoveryBoolean) {
             callback.invoke(
                 newExtractorLink(

@@ -27,7 +27,7 @@ class CalcioStreamingLatProvider : MainAPI() {
                 val href = it.select("a")!!.attr("href")
                 val name = it.select("a")!!.text()
                 val posterUrl = fixUrl("https://i.imgur.com/YTz3Wp7.jpeg")
-                LiveSearchResponse(
+                newLiveSearchResponse(
                     name,
                     href,
                     this@CalcioStreamingLatProvider.name,

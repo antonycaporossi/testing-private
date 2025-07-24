@@ -82,12 +82,11 @@ class GuardaSerieProvider : MainAPI() {
                 val epName = epData.selectFirst("a")?.attr("data-title")
                 val data = epData.select("div.mirrors > a").map { it.attr("data-link") }
                     .joinToString ( "," )
-                Episode(
-                    data = data,
-                    name = epName,
-                    season = season + 1,
-                    episode = epNum + 1,
-                )
+                newEpisode(data){
+                    this.season = season + 1
+                    this.episode = epNum + 1
+                    this.name = epName
+                }
             }
         }.flatten()
 

@@ -192,7 +192,12 @@ class StreamingcommunityProvider : MainAPI() {
         val posterUrl =
             "$cdnUrl/images/" + this.images.filter { it.type == "cover" }.map { it.filename }
                 .firstOrNull()
-        return Episode(data, epTitle, season, epNum, posterUrl = posterUrl)
+        return newEpisode(data){
+            this.name = epTitle
+            this.season = season
+            this.episode = epNum
+            this.posterUrl = posterUrl
+        }
     }
 
     override suspend fun load(url: String): LoadResponse {

@@ -49,11 +49,11 @@ class AnimeSaturnProvider : MainAPI() {
                 "x-requested-with" to "XMLHttpRequest"
             )
         private suspend fun request(url: String): NiceResponse {
-            if (securityCookie.isEmpty()) {
+            /*if (securityCookie.isEmpty()) {
                 securityCookie = getCookies(mainUrl)
                 headers["cookie"] = securityCookie.toString()
-            }
-            return app.get(url, headers = headers)
+            }*/
+            return app.get(url)
         }
 
         
@@ -127,10 +127,9 @@ class AnimeSaturnProvider : MainAPI() {
         if (episode.contains("-"))
             episode = episode.split("-")[0]
 
-        return Episode(
-            data = this.attr("href"),
-            episode = episode.toInt()
-        )
+        return newEpisode(this.attr("href")) {
+                this.episode = episode.toInt()
+        }
 
     }
 

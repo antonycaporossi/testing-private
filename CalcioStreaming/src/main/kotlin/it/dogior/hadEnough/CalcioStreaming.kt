@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
 
 class CalcioStreaming : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://guardacalcio.sbs"
+    override var mainUrl = "https://guardacalcio.team"
     override var name = "CalcioStreaming"
     override val hasMainPage = true
     override val hasChromecastSupport = true
@@ -30,13 +30,13 @@ class CalcioStreaming : MainAPI() {
                 val href = it.selectFirst("a")!!.attr("href")
                 val name = it.selectFirst("a > div > h1")!!.text()
                 val posterUrl = fixUrl(it.selectFirst("a > img")!!.attr("src"))
-                LiveSearchResponse(
+                newLiveSearchResponse(
                     name,
                     href,
-                    this@CalcioStreaming.name,
-                    TvType.Live,
-                    posterUrl,
-                )
+                    TvType.Live
+                ){
+                    this.posterUrl = posterUrl
+                }
             }
             HomePageList(
                 categoryName,
@@ -54,14 +54,15 @@ class CalcioStreaming : MainAPI() {
         val document = app.get(url).document
         val poster =  fixUrl(document.select("#title-single > div").attr("style").substringAfter("url(").substringBeforeLast(")"))
         val matchStart = document.select("div.info-wrap > div").textNodes().joinToString("").trim()
-        return LiveStreamLoadResponse(
+        return newLiveStreamLoadResponse(
             document.selectFirst(" div.info-t > h1")!!.text(),
             url,
-            this.name,
-            url,
-            poster,
-            plot = matchStart
-        )
+            url
+        ) {
+            this.posterUrl = poster
+            this.plot = matchStart
+            this.contentRating = "18+"
+        }
     }
 
     private fun getStreamUrl(document: Document) : String? {
