@@ -13,9 +13,10 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ShortLink.unshorten
 import com.lagradost.cloudstream3.utils.loadExtractor
 import org.jsoup.nodes.Element
+import android.util.Log
 
 class CasaCinemaProvider : MainAPI() { // all providers must be an instance of MainAPI
-    override var mainUrl = "https://casacinema.living/"
+    override var mainUrl = "https://casacinema.world/"
     override var name = "CasaCinema"
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
     override val hasChromecastSupport = true
@@ -25,8 +26,9 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
 
     override val mainPage =
         mainPageOf(
-            "$mainUrl/category/serie-tv/page/" to "Ultime Serie Tv",
-            "$mainUrl/category/film/page/" to "Ultimi Film",
+            "$mainUrl/cinema/page/" to "Al cinema",
+            "$mainUrl/film/page/" to "Ultimi Film",
+            "$mainUrl/serie-tv/page/" to "Ultime Serie Tv",
         )
 
     private fun fixTitle(element: Element?): String {
@@ -49,8 +51,8 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
         val url = request.data + page
 
         val soup = app.get(url, referer = mainUrl).document
-        val home = soup.select("ul.posts>li").mapNotNull { it.toSearchResult() }
-        val hasNext = soup.select("div.navigation>ul>li>a").last()?.text() == "Pagina successiva »"
+        val home = soup.select("div.posts").mapNotNull { it.toSearchResult() }
+        val hasNext = soup.select("div.navigation a").last()?.text() == "Pagina successiva »"
         return newHomePageResponse(arrayListOf(HomePageList(request.name, home)), hasNext = hasNext)
     }
 
@@ -59,7 +61,7 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
         val queryFormatted = query.replace(" ", "+")
         val url = "$mainUrl/?s=$queryFormatted"
         val doc = app.get(url, referer = mainUrl, interceptor = interceptor).document
-        return doc.select("ul.posts>li").map { it.toSearchResult() }
+        return doc.select("div.posts").map { it.toSearchResult() }
     }
 
     private fun Element.toSearchResult(): SearchResponse {
@@ -69,7 +71,8 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
             this.selectFirst("a")?.attr("href") ?: throw ErrorLoadingException("No Link found")
 
         val quality = this.selectFirst("div.hd")?.text()
-        val posterUrl = this.selectFirst("a")?.attr("data-thumbnail")
+        val style = this.selectFirst("a")?.selectFirst("div")?.attr("style") ?: ""
+        val posterUrl = fixUrl(Regex("background-image:\\s*url\\(([^)]*)\\)").find(style)?.groupValues?.get(1) ?: "")
 
         return if (isMovie) {
             newMovieSearchResponse(title, link, TvType.Movie) {
@@ -96,7 +99,7 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
             ?.substringBefore("-")
             ?.substringAfter(",")
             ?.filter { it.isDigit() }
-        val poster = document.selectFirst("img.thumbnail")?.attr("src")
+        val poster = fixUrl(document.selectFirst("img.thumbnail")?.attr("src") ?: throw ErrorLoadingException("No Poster found"))
         val rating = document.selectFirst("div.rating>div.value")?.text()?.trim()?.toRatingInt()
         val recomm = document.select("div.crp_related>ul>li").map { it.toRecommendResult() }
         if (type == TvType.TvSeries) {
@@ -187,7 +190,12 @@ class CasaCinemaProvider : MainAPI() { // all providers must be an instance of M
                 "Episodio $epNum"
             }
         val posterUrl = this.selectFirst("figure>img")?.attr("src")
-        return Episode(data, epTitle, season, epNum.toInt(), posterUrl = posterUrl)
+        return newEpisode(data){
+            this.name = epTitle
+            this.season = season
+            this.episode = epNum.toInt()
+            this.posterUrl = posterUrl
+        }
     }
 
 
