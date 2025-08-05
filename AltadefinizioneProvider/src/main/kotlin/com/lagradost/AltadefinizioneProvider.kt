@@ -16,7 +16,7 @@ import com.lagradost.cloudstream3.network.CloudflareKiller
 
 class AltadefinizioneProvider : MainAPI() {
     override var lang = "it"
-    override var mainUrl = "https://altadefinizione.gent"
+    override var mainUrl = "https://altadefinizione.free"
     override var name = "Altadefinizione"
     override val hasMainPage = true
     override val hasChromecastSupport = true
