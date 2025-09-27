@@ -3,6 +3,6 @@
     "description": "Cloudstream Non-english Plugin Repository",
     "manifestVersion": 1,
     "pluginLists": [
-      "https://raw.githubusercontent.com/antonycaporossi/testing-private/builds/plugins.json"
+      "https://raw.githubusercontent.com/antonycaporossi/cs-extensions-ant/builds/plugins.json"
     ]
 }
